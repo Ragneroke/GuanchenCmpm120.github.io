@@ -1,7 +1,7 @@
 function Bullets(game, x, y, key, sprite) {
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	this.anchor.set(0.5);
-
+	//Set up the physics satus for bullets
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
 	this.pool = 10;
