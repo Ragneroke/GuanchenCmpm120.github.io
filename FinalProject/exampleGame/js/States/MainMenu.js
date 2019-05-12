@@ -12,6 +12,8 @@ MainMenu.prototype = {
 		game.load.image('aid', 'assets/img/firstaid.png');
 		game.load.image('diamond', 'assets/img/diamond.png');
 		game.load.atlas('orge', 'assets/img/mainCharacter.png', 'assets/img/mainCharacter.json');
+		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.image('test', 'assets/tileTest/tileSheet.png');
 		game.stage.backgroundColor = "#facade";
 
 	},

@@ -15,11 +15,22 @@ function Players(game, x, y, key, frame) {
 
 	//Setup the bullet function of the player
 	this.direction = 180;
-	this.weapon = game.add.weapon(5, 'star');
-	this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+	this.weapon = game.add.weapon(1, 'star');
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
 	this.weapon.fireRate = 300;
+
+	// //Setup another bullet funciton for back up
+	// this.bullets = game.add.group();
+	// this.bulletTime = 0;
+	// this.bullets.enableBody = true;
+	// this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+	// this.bullets.createMultiple(30, 'star');
+	// this.bullets.setAll('anchor', 0.5);
+	// this.bullets.setAll('outOfBoundsKill', true);
+	// this.bullets.setAll('checkWorldBounds', true);
+
+
 
 	//Set the element type of player
 	this.etype = null;
@@ -71,11 +82,24 @@ Players.prototype.update = function(){
 		if(fireButton.isDown){
 			//Fire the Weapon
 			this.weapon.fire();
+			console.log(this.etype);
 		}
 		game.debug.body(this);
 		game.debug.spriteInfo(this,32,32);
+		game.debug.body(this.weapon);
 		if(testButton.isDown){
 			console.log(this.etype);
 		}
 
 }
+
+// Players.prototype.fireBullet = function(){
+// 	if(game.time.now > this.bulletTime){
+// 		bullet = this.bullets.getFirstExists(false);
+// 		if(bullet){
+// 			bullet.reset(this.x, this.y);
+// 			bullet.body.velocity.y = -400;
+// 			this.bulletTime = game.time.now + 200;
+// 		}
+// 	}
+// }
