@@ -1,18 +1,22 @@
-function Baddies(game, x, y, key, frame) {
+function Baddies(game, x, y, key, frame, player) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
-	this.anchor.set(0.5);
 
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
-	this.body.setSize(50,50,28,35);
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 10;
+	this.player = player;
+	this.scale.setTo(1.5,1.5);
+	this.body.setSize(20,20,13,15);
+	this.originX = x;
+	this.originY = y;
+	this.speed = 150;
 
 	//Set the animation of the player
-	this.animations.add('run', [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,0], 30, true);
+	this.animations.add('stay', [0,1,2,3,4,5,6,7], 10, true);
 
 	//Setup the bullet function of the player
 	// this.direction = 180;
@@ -34,7 +38,6 @@ function Baddies(game, x, y, key, frame) {
 
 
 	//Set the element type of player
-	this.etype = 'grass';
 
 	//Set the cursor for controller
 	// cursors = game.input.keyboard.createCursorKeys();
@@ -46,3 +49,23 @@ function Baddies(game, x, y, key, frame) {
 
 Baddies.prototype = Object.create(Phaser.Sprite.prototype);
 Baddies.prototype.constructor = Baddies;
+Baddies.prototype.update = function(){
+	this.animations.play('stay');
+	var chasing = false;
+	if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 500){
+		if(this.player.x > this.x){
+			this.body.velocity.x = this.speed;
+		}else if(this.player.x < this.x){
+			this.body.velocity.x = -this.speed;
+		}
+
+		if(this.player.y > this.y){
+			this.body.velocity.y = this.speed;
+		}else if (this.player.y < this.y){
+			this.body.velocity.y = -this.speed;
+		}
+		var chasing = true;
+	}
+	game.debug.body(this);
+	console.log(chasing);
+}

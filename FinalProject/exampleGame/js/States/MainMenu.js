@@ -11,6 +11,8 @@ MainMenu.prototype = {
 		game.load.image('fire', 'assets/img/fire.png');
 		game.load.image('aid', 'assets/img/firstaid.png');
 		game.load.image('diamond', 'assets/img/diamond.png');
+		game.load.spritesheet('fireSpirit', 'assets/img/messy.png',37,32);
+		game.load.spritesheet('ladder', 'assets/img/ladder.png',32,32);
 		game.load.atlas('orge', 'assets/img/mainCharacter.png', 'assets/img/mainCharacter.json');
 		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('test', 'assets/tileTest/tileSheet.png');
