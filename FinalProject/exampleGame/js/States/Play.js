@@ -32,10 +32,10 @@ Play.prototype = {
 		this.groundLayer = this.map.createLayer('BackGround');
 		this.wallLayer = this.map.createLayer('Collision');
 		this.groundLayer.resizeWorld();
-		this.map.setCollisionByExclusion([],true,this.wallLayer);
+		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 	
-		door = game.add.tileSprite(game.width/2-50, game.height/2, 100, 10, "platform");
+		door = game.add.tileSprite(780, 1325, 100, 10, "platform");
 		fire = game.add.sprite(750, 1500, 'fire');
 		game.physics.enable([door,fire], Phaser.Physics.ARCADE);
 		fire.scale.setTo(0.2);
@@ -59,6 +59,9 @@ Play.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
+		//Test tile properties
+
+
 
 
 	},
@@ -74,13 +77,16 @@ Play.prototype = {
 
 		game.physics.arcade.collide(this.player, this.wallLayer);
 
+
+		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
+
 		if(this.player.etype != 'fire'){
 			game.physics.arcade.collide(this.player, door);
 		}else{
-			game.physics.arcade.overlap(this.player, door, this.openDoor, null, this)
+			game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
 		}
 
-		//game.physics.arcade.overlap(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
+		
 
 
 
@@ -101,7 +107,11 @@ Play.prototype = {
 		this.player.weapon.bullets.getAt(0).kill();
 	},
 	hitWall:function(){
+		console.log('check');
 		this.player.weapon.bullets.getAt(0).kill();
+	},
+	render:function(){
+		this.wallLayer.debug = true;
 	}
 
 

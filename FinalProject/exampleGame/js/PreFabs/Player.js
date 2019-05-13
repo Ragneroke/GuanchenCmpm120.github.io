@@ -7,7 +7,7 @@ function Players(game, x, y, key, frame) {
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
-	this.body.setSize(50,50,28,35);
+	this.body.setSize(5,5,28,35);
 	this.body.collideWorldBounds = true;
 
 	//Set the animation of the player
@@ -82,17 +82,16 @@ Players.prototype.update = function(){
 		if(fireButton.isDown){
 			//Fire the Weapon
 			this.weapon.fire();
-			console.log(this.weapon.bulletKey);
 		}
 		game.debug.body(this);
-		game.debug.spriteInfo(this,32,32);
 		game.debug.body(this.weapon);
 		if(testButton.isDown){
-			console.log(this.etype);
 		}
 
 }
 Players.prototype.resetWeapon = function(type){
+	//This function will destroy the previous weapon
+	//and setup a new one when player collect elements
 	this.weapon.destroy();
 	this.weapon = game.add.weapon(1, type);
 	this.weapon.bulletSpeed = 350;
