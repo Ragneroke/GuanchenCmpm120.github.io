@@ -82,7 +82,7 @@ Players.prototype.update = function(){
 		if(fireButton.isDown){
 			//Fire the Weapon
 			this.weapon.fire();
-			console.log(this.etype);
+			console.log(this.weapon.bulletKey);
 		}
 		game.debug.body(this);
 		game.debug.spriteInfo(this,32,32);
@@ -92,7 +92,13 @@ Players.prototype.update = function(){
 		}
 
 }
-
+Players.prototype.resetWeapon = function(type){
+	this.weapon.destroy();
+	this.weapon = game.add.weapon(1, type);
+	this.weapon.bulletSpeed = 350;
+	this.weapon.trackSprite(this, 0, 0);
+	this.weapon.fireRate = 300;
+}
 // Players.prototype.fireBullet = function(){
 // 	if(game.time.now > this.bulletTime){
 // 		bullet = this.bullets.getFirstExists(false);

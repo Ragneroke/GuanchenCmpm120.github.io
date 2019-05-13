@@ -34,11 +34,7 @@ Play.prototype = {
 		this.groundLayer.resizeWorld();
 		this.map.setCollisionByExclusion([],true,this.wallLayer);
 
-		//Set physics
-		// leftWall.body.collideWorldBounds = true;
-		// rightWall.body.collideWorldBounds = true;
-		// topWall1.body.collideWorldBounds = true;
-		// topWall2.body.collideWorldBounds = true;
+	
 		door = game.add.tileSprite(game.width/2-50, game.height/2, 100, 10, "platform");
 		fire = game.add.sprite(750, 1500, 'fire');
 		game.physics.enable([door,fire], Phaser.Physics.ARCADE);
@@ -53,7 +49,6 @@ Play.prototype = {
 
 		//Set player
 		//Create the player
-
 		this.player = new Players(game, game.world.centerX, 1400, 'orge', 1);
 		game.add.existing(this.player);
 		game.camera.follow(this.player);
@@ -97,6 +92,7 @@ Play.prototype = {
 	killFire: function(){
 		fire.kill();
 		this.player.etype = 'fire';
+		this.player.resetWeapon('diamond');
 	},
 	openDoor: function(){
 		if(this.player.etype == 'fire'){
