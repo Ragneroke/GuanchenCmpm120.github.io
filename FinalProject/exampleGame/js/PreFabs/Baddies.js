@@ -7,13 +7,14 @@ function Baddies(game, x, y, key, frame, player) {
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
 	this.body.collideWorldBounds = true;
-	this.maxHealth = 10;
+	this.maxHealth = 5;
 	this.player = player;
 	this.scale.setTo(1.5,1.5);
 	this.body.setSize(20,20,13,15);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 150;
+	this.speed = 15;
+	this.health = this.maxHealth;
 
 	//Set the animation of the player
 	this.animations.add('stay', [0,1,2,3,4,5,6,7], 10, true);
@@ -52,7 +53,8 @@ Baddies.prototype.constructor = Baddies;
 Baddies.prototype.update = function(){
 	this.animations.play('stay');
 	var chasing = false;
-	if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 500){
+
+	if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 300){
 		if(this.player.x > this.x){
 			this.body.velocity.x = this.speed;
 		}else if(this.player.x < this.x){
@@ -66,6 +68,8 @@ Baddies.prototype.update = function(){
 		}
 		var chasing = true;
 	}
-	game.debug.body(this);
-	console.log(chasing);
+}
+
+Baddies.prototype.hitBounce = function(dir){
+
 }

@@ -1,3 +1,7 @@
+//Group7(Large Soda):Adventure of Slime
+//Group member: Ying Luo, Guanchen Liu, Jian Wu
+//Git repo:https://github.com/Ragneroke/cmpm120
+
 var game;
 var scoreText;
 var baddie1;
@@ -6,7 +10,7 @@ var music;
 window.onload = function() {
 	game = new Phaser.Game(600, 600, Phaser.AUTO);
 	game.state.add('MainMenu', MainMenu);
-	game.state.add('Play', Play);
+	game.state.add('testStage', Play);
 	game.state.add('GameOver', GameOver);
 	game.state.start('MainMenu');
 }
