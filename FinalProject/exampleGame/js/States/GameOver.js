@@ -6,7 +6,7 @@ GameOver.prototype = {
 
 	},
 	create: function(){
-		var menuText = game.add.text(16, 16, 'GameOver\nYour Score is ' + '\nPress [Space] to Retry', {fontSize: '32px', fill: '#000'});
+		var menuText = game.add.text(16, 16, 'Test Stage Over, Good job!', {fontSize: '32px', fill: '#000'});
 	},
 	update: function(){
 		score = 0;

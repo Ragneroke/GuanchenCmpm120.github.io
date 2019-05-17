@@ -3,19 +3,23 @@ function Players(game, x, y, key, frame) {
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Player = this;
 	this.anchor.set(0.5);
+	this.scale.setTo(0.02,0.02);
 
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
-	this.body.setSize(5,5,28,35);
+	this.body.setSize(1000,1000,1400,800);
 	this.body.collideWorldBounds = true;
+	this.maxHealth = 5;
+	this.health = this.maxHealth;
 
 	//Set the animation of the player
-	this.animations.add('run', [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,0], 30, true);
+	this.animations.add('run', [0,1,2,3,4,5,6,7], 10, true);
 
 	//Setup the bullet function of the player
 	this.direction = 180;
 	this.weapon = game.add.weapon(1, 'star');
+	this.weapon.bullets.type = 'good';
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
 	this.weapon.fireRate = 300;
@@ -31,7 +35,9 @@ function Players(game, x, y, key, frame) {
 	// this.bullets.setAll('checkWorldBounds', true);
 
 
-
+	//Set music for player
+	this.shot = game.add.audio('pop');
+	this.shot.volume = 0.3;
 	//Set the element type of player
 	this.etype = null;
 
@@ -50,30 +56,30 @@ Players.prototype.update = function(){
 	if(cursors.left.isDown){
 
 			//Move to left
-			this.body.velocity.x = -180;
+			this.body.velocity.x = -130;
 			if(cursors.down.isDown){
-				this.body.velocity.y = 180;
+				this.body.velocity.y = 130;
 			}else if (cursors.up.isDown){
-				this.body.velocity.y = - 180;
+				this.body.velocity.y = - 130;
 			}
 			this.weapon.fireAngle = 180;
 		}else if(cursors.right.isDown){
 
 			//Move to right
-			this.body.velocity.x = 180;
+			this.body.velocity.x = 130;
 			if(cursors.down.isDown){
-				this.body.velocity.y = 180;
+				this.body.velocity.y = 130;
 			}else if (cursors.up.isDown){
-				this.body.velocity.y = - 180;
+				this.body.velocity.y = - 130;
 			}
 			this.weapon.fireAngle = 0;
 		}else if(cursors.up.isDown){
 
-			this.body.velocity.y = - 180;
+			this.body.velocity.y = - 130;
 			this.weapon.fireAngle = 270;
 		}else if(cursors.down.isDown){
 
-			this.body.velocity.y = 180;
+			this.body.velocity.y = 130;
 			this.weapon.fireAngle = 90;
 		}else{
 			this.body.velocity.x = 0;
@@ -82,11 +88,10 @@ Players.prototype.update = function(){
 		if(fireButton.isDown){
 			//Fire the Weapon
 			this.weapon.fire();
+			this.currentDir = this.weapon.fireAngle;
+			this.shot.play();
 		}
-		game.debug.body(this);
-		game.debug.body(this.weapon);
-		if(testButton.isDown){
-		}
+
 
 }
 Players.prototype.resetWeapon = function(type){
@@ -98,13 +103,3 @@ Players.prototype.resetWeapon = function(type){
 	this.weapon.trackSprite(this, 0, 0);
 	this.weapon.fireRate = 300;
 }
-// Players.prototype.fireBullet = function(){
-// 	if(game.time.now > this.bulletTime){
-// 		bullet = this.bullets.getFirstExists(false);
-// 		if(bullet){
-// 			bullet.reset(this.x, this.y);
-// 			bullet.body.velocity.y = -400;
-// 			this.bulletTime = game.time.now + 200;
-// 		}
-// 	}
-// }
