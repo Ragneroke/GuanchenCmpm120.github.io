@@ -17,6 +17,7 @@ function Baddies(game, x, y, key, frame, player) {
 	this.health = this.maxHealth;
 	this.statNow = true;
 
+
 	//Set the animation of the player
 	this.animations.add('stay', [0,1,2,3,4,5,6,7], 10, true);
 
@@ -90,4 +91,8 @@ Baddies.prototype.getHit = function(){
 			this.kill();
 			this.statNow = false;
 		}
+}
+
+Baddies.prototype.hitBounce = function(dir){
+
 }

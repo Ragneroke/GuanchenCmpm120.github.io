@@ -5,6 +5,7 @@ function Players(game, x, y, key, frame) {
 	this.anchor.set(0.5);
 	this.scale.setTo(0.06,0.06);
 
+
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
@@ -12,6 +13,7 @@ function Players(game, x, y, key, frame) {
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.health = this.maxHealth;
+
 
 	//Set the animation of the player
 	this.animations.add('run', [0,1,2,3,4,5,6,7], 10, true);
@@ -67,6 +69,7 @@ Players.prototype.update = function(){
 
 			//Move to right
 			this.body.velocity.x = 130;
+
 			this.weapon.fireAngle = 0;
 			this.body.velocity.y = 0;
 			this.move = true;
@@ -74,7 +77,6 @@ Players.prototype.update = function(){
 		if(cursors.up.isDown){
 
 			this.body.velocity.y = - 130;
-			this.body.velocity.x = 0;
 			this.weapon.fireAngle = 270;
 			this.move = true;
 		}
@@ -82,7 +84,6 @@ Players.prototype.update = function(){
 
 
 			this.body.velocity.y = 130;
-			this.body.velocity.x = 0;
 			this.weapon.fireAngle = 90;
 			this.move = true;
 		}

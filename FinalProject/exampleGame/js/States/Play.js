@@ -33,6 +33,7 @@ Play.prototype = {
 		fire = game.add.sprite(game.world.centerX, 1500, 'fire');
 		fire.scale.setTo(0.5);
 		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
+
 		game.physics.enable([door,fire,ladder], Phaser.Physics.ARCADE);
 		fire.scale.setTo(0.2);
 		ladder.body.immovable = true;
@@ -48,6 +49,7 @@ Play.prototype = {
 
 
 		//Create baddies in this stage
+
 		this.baddie1 = new BaddiesA(game, game.world.centerX, 650, 'fireSpirit', 1, this.player);
 		game.add.existing(this.baddie1);
 
@@ -74,7 +76,7 @@ Play.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
-		//Set Instructions
+
 		this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
 		this.ins2 = game.add.text(750, 1450, 'Eat elements to change your form!', {fontSize: '15px', fill: '#DBE639'});
 		this.ins3 = game.add.text(450, 920, 'Kill enemy by bullets!', {fontSize: '15px', fill: '#DBE639'});
@@ -105,6 +107,7 @@ Play.prototype = {
 
 		game.physics.arcade.overlap(this.player, fire, this.killFire, null, this);
 
+
 		if(this.baddie1 != null){
 			game.physics.arcade.overlap(this.baddie1.weapon1.bullets, this.player, this.hitPlayer, null, this);
 		}
@@ -124,6 +127,7 @@ Play.prototype = {
 		this.typeText = game.add.text(600, 1000, 'Type: Fire', {fontSize: '32px', fill: '#DBE639'});
 		this.typeText.fixedToCamera = true;
 		this.typeText.cameraOffset.setTo(50,100);
+
 	},
 
 	openDoor: function(){
@@ -154,9 +158,11 @@ Play.prototype = {
 		if(this.baddie1.health <= 0) {
 			this.baddie1.kill();
 			this.baddie1.statNow = false;
+
 			this.baddie1 = null;
 		}
 	},
+
 
 	hitPlayer:function(){
 		if(this.baddie1.weapon1 != null){
@@ -178,6 +184,7 @@ Play.prototype = {
 		if(this.baddie1 == null){
 			this.bgmMusic.stop();
 			game.state.start('Stage1');
+
 		}
 		console.log(this.baddie1);
 	},
