@@ -87,6 +87,8 @@ Stage1.prototype = {
 
 		game.physics.arcade.collide(this.enemies, this.wallLayer);
 
+		game.physics.arcade.collide(this.enemies, this.enemies);
+
 
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 

@@ -8,7 +8,7 @@ var baddie1;
 var baddie2;
 var music;
 window.onload = function() {
-	game = new Phaser.Game(600, 600, Phaser.AUTO);
+	game = new Phaser.Game(800, 800, Phaser.AUTO);
 	game.state.add('MainMenu', MainMenu);
 	game.state.add('testStage', Play);
 	game.state.add('Stage1', Stage1);

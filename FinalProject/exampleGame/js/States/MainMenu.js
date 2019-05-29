@@ -19,8 +19,10 @@ MainMenu.prototype = {
 		game.load.atlas('orge', 'assets/img/mainCharacter.png', 'assets/img/mainCharacter.json');
 		game.load.atlas('slime', 'assets/img/slimeblue.png', 'assets/img/slimeblue.json');
 		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('stage0', 'assets/tileTest/stage0.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage1', 'assets/tileTest/StageFirst.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('test', 'assets/tileTest/tileSheet.png');
+		game.load.image('stage0m', 'assets/tileTest/stage0.png');
 		game.load.image('stage1m', 'assets/tileTest/Stage1.png');
 		game.stage.backgroundColor = "#facade";
 

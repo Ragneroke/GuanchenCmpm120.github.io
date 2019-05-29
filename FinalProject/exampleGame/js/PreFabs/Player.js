@@ -3,7 +3,7 @@ function Players(game, x, y, key, frame) {
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Player = this;
 	this.anchor.set(0.5);
-	this.scale.setTo(0.02,0.02);
+	this.scale.setTo(0.06,0.06);
 
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -23,6 +23,7 @@ function Players(game, x, y, key, frame) {
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
 	this.weapon.fireRate = 300;
+	this.move = false;
 
 	// //Setup another bullet funciton for back up
 	// this.bullets = game.add.group();
@@ -53,35 +54,39 @@ Players.prototype = Object.create(Phaser.Sprite.prototype);
 Players.prototype.constructor = Players;
 
 Players.prototype.update = function(){
+	this.move = false;
 	if(cursors.left.isDown){
 
 			//Move to left
 			this.body.velocity.x = -130;
-			if(cursors.down.isDown){
-				this.body.velocity.y = 130;
-			}else if (cursors.up.isDown){
-				this.body.velocity.y = - 130;
-			}
 			this.weapon.fireAngle = 180;
-		}else if(cursors.right.isDown){
+			this.body.velocity.y = 0;
+			this.move = true;
+		}
+		if(cursors.right.isDown){
 
 			//Move to right
 			this.body.velocity.x = 130;
-			if(cursors.down.isDown){
-				this.body.velocity.y = 130;
-			}else if (cursors.up.isDown){
-				this.body.velocity.y = - 130;
-			}
 			this.weapon.fireAngle = 0;
-		}else if(cursors.up.isDown){
+			this.body.velocity.y = 0;
+			this.move = true;
+		}
+		if(cursors.up.isDown){
 
 			this.body.velocity.y = - 130;
+			this.body.velocity.x = 0;
 			this.weapon.fireAngle = 270;
-		}else if(cursors.down.isDown){
+			this.move = true;
+		}
+		if(cursors.down.isDown){
+
 
 			this.body.velocity.y = 130;
+			this.body.velocity.x = 0;
 			this.weapon.fireAngle = 90;
-		}else{
+			this.move = true;
+		}
+		if(!this.move){
 			this.body.velocity.x = 0;
 			this.body.velocity.y = 0;
 		}

@@ -18,20 +18,21 @@ Play.prototype = {
 
 		//Set the tilemap of the game
 		game.stage.setBackgroundColor('#87CEEB');
-		this.map = game.add.tilemap('map');
-		this.map.addTilesetImage('testTile', 'test');
+		this.map = game.add.tilemap('stage0');
+		this.map.addTilesetImage('common', 'test');
+		this.map.addTilesetImage('map2', 'test');
 
 		//New tilemaplayer object
 		this.groundLayer = this.map.createLayer('BackGround');
 		this.wallLayer = this.map.createLayer('Collision');
-		this.decoLayer = this.map.createLayer('Decoration');
 		this.groundLayer.resizeWorld();
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 		//Setup other stuff for the game
-		door = game.add.tileSprite(830, 1325, 100, 10, "platform");
-		fire = game.add.sprite(750, 1500, 'fire');
-		ladder = game.add.sprite(450,950, 'ladder');
+		door = game.add.tileSprite(game.world.centerX-155, 1190, 120, 30, "platform");
+		fire = game.add.sprite(game.world.centerX, 1500, 'fire');
+		fire.scale.setTo(0.5);
+		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
 		game.physics.enable([door,fire,ladder], Phaser.Physics.ARCADE);
 		fire.scale.setTo(0.2);
 		ladder.body.immovable = true;
@@ -45,8 +46,9 @@ Play.prototype = {
 		game.add.existing(this.player);
 		game.camera.follow(this.player);
 
+
 		//Create baddies in this stage
-		this.baddie1 = new BaddiesA(game, 450, 950, 'fireSpirit', 1, this.player);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 650, 'fireSpirit', 1, this.player);
 		game.add.existing(this.baddie1);
 
 		//Setup background music
@@ -73,9 +75,10 @@ Play.prototype = {
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
 		//Set Instructions
-		this.ins1 = game.add.text(830, 1300, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
+		this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
 		this.ins2 = game.add.text(750, 1450, 'Eat elements to change your form!', {fontSize: '15px', fill: '#DBE639'});
 		this.ins3 = game.add.text(450, 920, 'Kill enemy by bullets!', {fontSize: '15px', fill: '#DBE639'});
+
 
 
 
@@ -141,6 +144,12 @@ Play.prototype = {
 		this.baddie1.health -=1;
 		if(this.player.currentDir == 270){
 			this.baddie1.y -= 20;
+		}else if(this.player.currentDir == 0){
+			this.baddie1.x += 20;
+		}else if(this.player.currentDir == 90){
+			this.baddie1.y += 20;
+		}else if(this.player.currentDir == 180){
+			this.baddie1.x -= 20;
 		}
 		if(this.baddie1.health <= 0) {
 			this.baddie1.kill();
@@ -160,7 +169,7 @@ Play.prototype = {
 		this.healthText.cameraOffset.setTo(50,50);
 
 		if(this.player.health <= 0){
-			this.bgmMusic.kill();
+			this.bgmMusic.stop();
 			game.state.start('GameOver');
 
 		}
