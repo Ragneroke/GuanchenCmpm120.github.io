@@ -3,20 +3,20 @@ function Players(game, x, y, key, frame) {
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Player = this;
 	this.anchor.set(0.5);
-	this.scale.setTo(0.06,0.06);
+	this.scale.setTo(0.2,0.2);
 
 
 	//Setup the basic physics of players
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
-	this.body.setSize(1000,1000,1400,800);
+	this.body.setSize(100,100,100,100);
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.health = this.maxHealth;
 
 
 	//Set the animation of the player
-	this.animations.add('run', [0,1,2,3,4,5,6,7], 10, true);
+	this.animations.add('run', [7,0,1,2,3,4,5,6], 10, true);
 
 	//Setup the bullet function of the player
 	this.direction = 180;
@@ -24,8 +24,10 @@ function Players(game, x, y, key, frame) {
 	this.weapon.bullets.type = 'good';
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
-	this.weapon.fireRate = 300;
+	this.weapon.fireRate = 1000;
+	this.weapon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
 	this.move = false;
+	this.bulletPos = 0;
 
 	// //Setup another bullet funciton for back up
 	// this.bullets = game.add.group();
@@ -57,6 +59,7 @@ Players.prototype.constructor = Players;
 
 Players.prototype.update = function(){
 	this.move = false;
+	game.debug.body(this);
 	if(cursors.left.isDown){
 
 			//Move to left
@@ -78,6 +81,7 @@ Players.prototype.update = function(){
 
 			this.body.velocity.y = - 130;
 			this.weapon.fireAngle = 270;
+			this.body.velocity.x = 0;
 			this.move = true;
 		}
 		if(cursors.down.isDown){
@@ -85,6 +89,7 @@ Players.prototype.update = function(){
 
 			this.body.velocity.y = 130;
 			this.weapon.fireAngle = 90;
+			this.body.velocity.x = 0;
 			this.move = true;
 		}
 		if(!this.move){
@@ -96,6 +101,7 @@ Players.prototype.update = function(){
 			this.weapon.fire();
 			this.currentDir = this.weapon.fireAngle;
 			this.shot.play();
+			// if(this.weapon.bullets.getAt(0) != )
 		}
 
 
@@ -107,5 +113,5 @@ Players.prototype.resetWeapon = function(type){
 	this.weapon = game.add.weapon(1, type);
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
-	this.weapon.fireRate = 300;
+	this.weapon.fireRate = 1000;
 }

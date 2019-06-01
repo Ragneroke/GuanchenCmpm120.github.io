@@ -50,7 +50,7 @@ Play.prototype = {
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 650, 'fireSpirit', 1, this.player);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 650, 'iceSprite', 1, this.player);
 		game.add.existing(this.baddie1);
 
 		//Setup background music
@@ -63,9 +63,11 @@ Play.prototype = {
 
 		//Setup the Hud here
 		//Setup the text for health
-		this.healthText = game.add.text(600, 1000, 'Health: 5', {fontSize: '32px', fill: '#DBE639'});
-		this.healthText.fixedToCamera = true;
-		this.healthText.cameraOffset.setTo(50,50);
+		// this.healthText = game.add.text(600, 1000, 'Health: 5', {fontSize: '32px', fill: '#DBE639'});
+		// this.healthText.fixedToCamera = true;
+		// this.healthText.cameraOffset.setTo(50,50);
+		this.health = game.add.group();
+		this.setHealth(this.player.maxHealth);
 
 		//Setup the text for type
 		this.typeText = game.add.text(600, 1000, 'Type: Null', {fontSize: '32px', fill: '#DBE639'});
@@ -88,7 +90,7 @@ Play.prototype = {
 	},
 
 	update: function() {
-
+		game.debug.body(this.baddie1);
 		game.physics.arcade.collide(this.player, this.wallLayer);
 
 		game.physics.arcade.collide(this.baddie1, this.wallLayer);
@@ -98,10 +100,12 @@ Play.prototype = {
 
 		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
 
+		game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
+
 		if(this.player.etype != 'fire'){
 			game.physics.arcade.collide(this.player, door);
 		}else{
-			game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
+			// game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
 		}
 
 
@@ -169,10 +173,9 @@ Play.prototype = {
 			this.baddie1.weapon1.bullets.getAt(0).kill();
 		}
 		this.player.health -= 1;
-		this.healthText.kill();
-		this.healthText = game.add.text(600, 1000, 'Health: ' + this.player.health, {fontSize: '32px', fill: '#DBE639'});
-		this.healthText.fixedToCamera = true;
-		this.healthText.cameraOffset.setTo(50,50);
+		this.health.kill();
+		this.health = game.add.group();
+		this.setHealth(this.player.health);
 
 		if(this.player.health <= 0){
 			this.bgmMusic.stop();
@@ -188,8 +191,22 @@ Play.prototype = {
 		}
 		console.log(this.baddie1);
 	},
+	setHealth:function(health){
+		for(var i = 0; i < health; i++){
+			var hp = game.add.sprite(0,0,'aid');
+			hp.fixedToCamera = true;
+			hp.cameraOffset.setTo(50 + i* 35,50);
+			this.health.add(hp);
+
+		}
+
+	},
+	baddyHitWall:function(){
+		this.baddie1.weapon1.bullets.getAt(0).kill();
+	},
 	//Debug the collision from tile map
 	render:function(){
+		game.debug.body(this.baddie1);
 	}
 
 

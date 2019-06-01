@@ -16,8 +16,9 @@ MainMenu.prototype = {
 		game.load.audio('open', 'assets/audio/open.wav');
 		game.load.spritesheet('fireSpirit', 'assets/img/messy.png',37,32);
 		game.load.spritesheet('ladder', 'assets/img/ladder.png',32,32);
+		game.load.atlas('iceSprite', 'assets/img/iceSprite.png', 'assets/img/iceSprite.json');
 		game.load.atlas('orge', 'assets/img/mainCharacter.png', 'assets/img/mainCharacter.json');
-		game.load.atlas('slime', 'assets/img/slimeblue.png', 'assets/img/slimeblue.json');
+		game.load.atlas('slime', 'assets/img/slimeWhite.png', 'assets/img/slimeWhite.json');
 		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage0', 'assets/tileTest/stage0.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage1', 'assets/tileTest/StageFirst.json', null, Phaser.Tilemap.TILED_JSON);

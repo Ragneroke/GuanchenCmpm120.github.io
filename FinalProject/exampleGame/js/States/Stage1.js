@@ -93,12 +93,14 @@ Stage1.prototype = {
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
 		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
+		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
 
 		if(this.player.etype != 'fire'){
 			game.physics.arcade.collide(this.player, door);
-		}else{
-			game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
 		}
+		// }else{
+		// 	game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
+		// }
 
 
 		game.physics.arcade.overlap(this.player, fire, this.killFire, null, this);
@@ -134,17 +136,6 @@ Stage1.prototype = {
 		this.player.weapon.bullets.getAt(0).kill();
 	},
 
-	// hitBaddie:function(){
-	// 	this.player.weapon.bullets.getAt(0).kill();
-	// 	this.baddie1.health -=1;
-	// 	if(this.player.currentDir == 270){
-	// 		this.baddie1.y -= 20;
-	// 	}
-	// 	if(this.baddie1.health <= 0) {
-	// 		this.baddie1.kill();
-	// 		this.baddie1 = null;
-	// 	}
-	// },
 
 	climbLadder:function(){
 		if(this.baddie1 == null){
@@ -158,6 +149,9 @@ Stage1.prototype = {
 		game.add.existing(baddy);
 		group.add(baddy);
 	},
+	// baddyHitWall:function(){
+	// 	this.baddie1.weapon.bullets.getAt(0).kill();
+	// },
 	//Debug the collision from tile map
 	render:function(){
 	}

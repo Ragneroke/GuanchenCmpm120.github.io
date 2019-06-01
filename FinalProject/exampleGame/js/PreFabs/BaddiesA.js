@@ -9,8 +9,8 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.player = player;
-	this.scale.setTo(1.5,1.5);
-	this.body.setSize(20,20,13,15);
+	this.scale.setTo(0.2,0.2);
+	this.body.setSize(250,250,200,100);
 	this.originX = x;
 	this.originY = y;
 	this.speed = 15;
@@ -20,11 +20,11 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.weapon1.bullets.type = 'bad';
 	this.weapon1.bulletSpeed = 250;
 	this.weapon1.trackSprite(this, 20, 20);
-	this.weapon1.fireRate = 300;
+	this.weapon1.fireRate = 1000;
 	this.statNow = true;
 
 	//Set the animation of the player
-	this.animations.add('stay', [0,1,2,3,4,5,6,7], 10, true);
+	this.animations.add('stay', [0,0,0,0,1,1,1,1,1], 10, true);
 
 	//Setup the bullet function of the player
 	// this.direction = 180;
@@ -89,7 +89,6 @@ BaddiesA.prototype.update = function(){
 		}
 	}
 }
-
-BaddiesA.prototype.hitBounce = function(dir){
-
+BaddiesA.prototype.render = function(){
+	game.debug.body(this);
 }
