@@ -20,7 +20,6 @@ Play.prototype = {
 		game.stage.setBackgroundColor('#87CEEB');
 		this.map = game.add.tilemap('stage0');
 		this.map.addTilesetImage('common', 'test');
-		this.map.addTilesetImage('map2', 'test');
 
 		//New tilemaplayer object
 		this.groundLayer = this.map.createLayer('BackGround');
@@ -30,7 +29,7 @@ Play.prototype = {
 
 		//Setup other stuff for the game
 		door = game.add.tileSprite(game.world.centerX-155, 1190, 120, 30, "platform");
-		fire = game.add.sprite(game.world.centerX - 230, 1250, 'fire');
+		fire = game.add.sprite(game.world.centerX - 530, 1950, 'fire');
 		fire.scale.setTo(0.5);
 		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
 
@@ -50,7 +49,7 @@ Play.prototype = {
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 650, 'iceSprite', 1, this.player);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'iceSprite', 1, this.player);
 		game.add.existing(this.baddie1);
 
 		//Setup background music
@@ -99,7 +98,7 @@ Play.prototype = {
 
 		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
 
-		game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
+
 
 		if(this.player.etype != 'fire'){
 			game.physics.arcade.collide(this.player, door);
@@ -113,6 +112,7 @@ Play.prototype = {
 
 		if(this.baddie1 != null){
 			game.physics.arcade.overlap(this.baddie1.weapon1.bullets, this.player, this.hitPlayer, null, this);
+			game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
 		}
 
 		game.physics.arcade.overlap(this.player.weapon.bullets, this.baddie1, this.hitBaddie, null, this);
@@ -164,6 +164,7 @@ Play.prototype = {
 			this.baddie1.x -= 20;
 		}
 		if(this.baddie1.health <= 0) {
+			this.baddie1.weapon1.bullets.getAt(0).kill();
 			this.baddie1.kill();
 			this.baddie1.statNow = false;
 
@@ -206,7 +207,9 @@ Play.prototype = {
 
 	},
 	baddyHitWall:function(){
-		this.baddie1.weapon1.bullets.getAt(0).kill();
+		if(this.baddie1.statNow != false){
+			this.baddie1.weapon1.bullets.getAt(0).kill();
+		}
 	},
 	//Debug the collision from tile map
 	render:function(){

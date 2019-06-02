@@ -16,15 +16,29 @@ function Players(game, x, y, key, frame) {
 
 
 	//Set the animation of the player
-	this.animations.add('normal', [7,0,1,2,3,4,5,6], 10, true);
-	this.animations.add('normalStay', [8,8,8,9,9,9], 5, true);
-	this.animations.add('fireType', [17,10,11,12,13,14,15,16], 10, true);
-	this.animations.add('waterType', [27,20,21,22,23,24,25,26], 10, true);
-	this.animations.add('grassType', [37,30,31,32,33,34,35,36], 10, true);
+	this.animations.add('normal', 				[7,0,1,2,3,4,5,6], 10, true);
+	this.animations.add('normalStay', 			[8,8,8,9,9,9], 5, true);
+	this.animations.add('normalD', 				[40,41,42,41],5, true);
+	this.animations.add('normalDStay', 			[40,43,44,44,44,45,45,45,44,44,44,45,45,44,44,44,43,40,40,40,40,40,40,40], 5, true);
+
+	this.animations.add('fireType', 			[17,10,11,12,13,14,15,16], 10, true);
+	this.animations.add('fireStay',				[18,18,18,19,19,19], 5, true);
+	this.animations.add('fireD', 				[46,47,48,47],5, true);// fire down
+	this.animations.add('fireDStay', 			[46,49,50,50,50,51,51,51,50,50,50,51,51,50,50,50,49,46,46,46,46,46,46,46], 5, true);// fire down stay
+
+	this.animations.add('waterType', 			[27,20,21,22,23,24,25,26], 10, true);
+	this.animations.add('waterStay', 			[28,28,28,29,29,29], 5, true);// water stay
+	this.animations.add('waterD', 				[52,53,54,53],5, true);// water down
+	this.animations.add('waterDStay',			[52,55,56,56,56,57,57,57,56,56,56,57,57,56,56,56,55,52,52,52,52,52,52,52], 5, true);// water stay
+
+	this.animations.add('grassType', 			[37,30,31,32,33,34,35,36], 10, true);
+	this.animations.add('grassStay', 			[38,38,38,39,39,39], 5, true);// grass stay
+	this.animations.add('grassD', 				[58,59,60,59],5, true);// grass down
+	this.animations.add('grassStay', 			[58,61,62,62,62,63,63,63,62,62,62,63,63,62,62,62,61,58,58,58,58,58,58,58], 5, true);// grass stay
 
 	//Setup the bullet function of the player
 	this.direction = 180;
-	this.weapon = game.add.weapon(1, 'star');
+	this.weapon = game.add.weapon(0, 'star');
 	this.weapon.bullets.type = 'good';
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
@@ -110,13 +124,67 @@ Players.prototype.update = function(){
 
 		if(this.etype == null){
 			if(this.move == true){
-				this.animations.play('normal');
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('normal');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('normalD');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('normalD');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('normal');
+				}
 			}else{
-				this.animations.play('normalStay');
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('normalStay');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('normalDStay');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('normalDStay');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('normalStay');
+				}
+
 			}
 		}else if(this.etype == 'fire'){
-			this.animations.play('fireType');
+			if(this.move == true){
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('fireType');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('fireD');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('fireD');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('fireType');
+				}
+			}else{
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('fireStay');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('fireDStay');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('fireDStay');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('fireStay');
+				}
+
 		}
+	}
 
 
 }

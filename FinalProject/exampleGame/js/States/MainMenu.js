@@ -16,6 +16,7 @@ MainMenu.prototype = {
 		game.load.atlas('iceSprite', 'assets/img/iceSprite.png', 'assets/img/iceSprite.json');
 		game.load.atlas('slime', 'assets/img/slimeWhite.png', 'assets/img/slimeWhite.json');
 		game.load.atlas('slimeAll', 'assets/img/slimeAll.png', 'assets/img/slimeAll.json');
+		game.load.atlas('slimeRest', 'assets/img/whiteRest.png', 'assets/img/whiteRest.json');
 		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage0', 'assets/tileTest/stage0.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage1', 'assets/tileTest/StageFirst.json', null, Phaser.Tilemap.TILED_JSON);
