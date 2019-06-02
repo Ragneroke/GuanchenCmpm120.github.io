@@ -16,7 +16,11 @@ function Players(game, x, y, key, frame) {
 
 
 	//Set the animation of the player
-	this.animations.add('run', [7,0,1,2,3,4,5,6], 10, true);
+	this.animations.add('normal', [7,0,1,2,3,4,5,6], 10, true);
+	this.animations.add('normalStay', [8,8,8,9,9,9], 5, true);
+	this.animations.add('fireType', [17,10,11,12,13,14,15,16], 10, true);
+	this.animations.add('waterType', [27,20,21,22,23,24,25,26], 10, true);
+	this.animations.add('grassType', [37,30,31,32,33,34,35,36], 10, true);
 
 	//Setup the bullet function of the player
 	this.direction = 180;
@@ -102,6 +106,16 @@ Players.prototype.update = function(){
 			this.currentDir = this.weapon.fireAngle;
 			this.shot.play();
 			// if(this.weapon.bullets.getAt(0) != )
+		}
+
+		if(this.etype == null){
+			if(this.move == true){
+				this.animations.play('normal');
+			}else{
+				this.animations.play('normalStay');
+			}
+		}else if(this.etype == 'fire'){
+			this.animations.play('fireType');
 		}
 
 

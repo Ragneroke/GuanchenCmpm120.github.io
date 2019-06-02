@@ -9,7 +9,7 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.player = player;
-	this.scale.setTo(0.2,0.2);
+	this.scale.setTo(0.25,0.25);
 	this.body.setSize(250,250,200,100);
 	this.originX = x;
 	this.originY = y;
@@ -90,5 +90,5 @@ BaddiesA.prototype.update = function(){
 	}
 }
 BaddiesA.prototype.render = function(){
-	game.debug.body(this);
+	// game.debug.body(this);
 }

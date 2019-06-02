@@ -93,7 +93,6 @@ Stage1.prototype = {
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
 		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
-		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
 
 		if(this.player.etype != 'fire'){
 			game.physics.arcade.collide(this.player, door);

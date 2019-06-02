@@ -30,7 +30,7 @@ Play.prototype = {
 
 		//Setup other stuff for the game
 		door = game.add.tileSprite(game.world.centerX-155, 1190, 120, 30, "platform");
-		fire = game.add.sprite(game.world.centerX, 1500, 'fire');
+		fire = game.add.sprite(game.world.centerX - 230, 1250, 'fire');
 		fire.scale.setTo(0.5);
 		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
 
@@ -43,7 +43,7 @@ Play.prototype = {
 
 		//Set player
 		//Create the player
-		this.player = new Players(game, game.world.centerX, 1400, 'slime', 1);
+		this.player = new Players(game, game.world.centerX-300, 1900, 'slimeAll', 1);
 		game.add.existing(this.player);
 		game.camera.follow(this.player);
 
@@ -90,7 +90,6 @@ Play.prototype = {
 	},
 
 	update: function() {
-		game.debug.body(this.baddie1);
 		game.physics.arcade.collide(this.player, this.wallLayer);
 
 		game.physics.arcade.collide(this.baddie1, this.wallLayer);
@@ -120,13 +119,18 @@ Play.prototype = {
 
 		game.physics.arcade.overlap(this.player, ladder, this.climbLadder, null, this);
 
-		this.player.animations.play('run');
+		// if(this.player.etype == null){
+		// 	this.player.animations.play('normal');
+		// }else if(this.player.etype == 'fire'){
+		// 	this.player.animations.play('fireType');
+		// }
 
 	},
 	killFire: function(){
 		fire.kill();
 		this.player.etype = 'fire';
-		this.player.resetWeapon('diamond');
+		this.player.animations.stop(null,true);
+		this.player.resetWeapon('fireBullet');
 		this.typeText.kill();
 		this.typeText = game.add.text(600, 1000, 'Type: Fire', {fontSize: '32px', fill: '#DBE639'});
 		this.typeText.fixedToCamera = true;
@@ -206,7 +210,7 @@ Play.prototype = {
 	},
 	//Debug the collision from tile map
 	render:function(){
-		game.debug.body(this.baddie1);
+		// game.debug.body(this.baddie1);
 	}
 
 
