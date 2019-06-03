@@ -9,11 +9,11 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.player = player;
-	this.scale.setTo(0.2,0.2);
+	this.scale.setTo(0.3,0.3);
 	// this.body.setSize(250,250,200,100);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 15;
+	this.speed = 5;
 	this.health = this.maxHealth;
 	this.direction = 180;
 	this.weapon1 = game.add.weapon(1, 'aid');
@@ -24,7 +24,7 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.statNow = true;
 
 	//Set the animation of the player
-	this.animations.add('stay', [0,0,0,0,1,1,1,1,1], 10, true);
+	this.animations.add('stay', [0,1,2,3,4], 5, true);
 
 	//Setup the bullet function of the player
 	// this.direction = 180;

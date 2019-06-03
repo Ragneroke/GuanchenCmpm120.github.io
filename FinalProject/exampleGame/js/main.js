@@ -15,6 +15,7 @@ window.onload = function() {
 	game.state.add('GameOver', GameOver);
 	game.state.start('MainMenu');
 }
+
 var MainMenu = function(game){};
 var Play = function(game){};
 var Stage1 = function(game){};

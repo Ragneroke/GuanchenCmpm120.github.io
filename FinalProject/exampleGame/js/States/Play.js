@@ -29,10 +29,9 @@ Play.prototype = {
 
 		//Setup other stuff for the game
 		door = game.add.tileSprite(game.world.centerX-155, 1190, 120, 30, "platform");
-		fire = game.add.sprite(game.world.centerX - 530, 1950, 'fire');
+		fire = game.add.sprite(game.world.centerX - 530, 1950, 'bonfire');
 		fire.scale.setTo(0.5);
 		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
-
 		game.physics.enable([door,fire,ladder], Phaser.Physics.ARCADE);
 		fire.scale.setTo(0.2);
 		ladder.body.immovable = true;
@@ -40,7 +39,6 @@ Play.prototype = {
 		door.body.immovable = true;
 
 
-		//Set player
 		//Create the player
 		this.player = new Players(game, game.world.centerX-300, 1900, 'slimeAll', 1);
 		game.add.existing(this.player);
@@ -49,7 +47,7 @@ Play.prototype = {
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'iceSprite', 1, this.player);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player);
 		game.add.existing(this.baddie1);
 
 		//Setup background music
@@ -62,25 +60,37 @@ Play.prototype = {
 
 		//Setup the Hud here
 		//Setup the text for health
-		// this.healthText = game.add.text(600, 1000, 'Health: 5', {fontSize: '32px', fill: '#DBE639'});
-		// this.healthText.fixedToCamera = true;
-		// this.healthText.cameraOffset.setTo(50,50);
+		this.healthText = game.add.text(16, 16, 'HP:');
+		this.healthText.fixedToCamera = true;
+		this.healthText.cameraOffset.setTo(15,15);
+		this.healthText.font = 'ZCOOL KuaiLe';
+		this.healthText.font = 'ZCOOL KuaiLe';
+		this.healthText.fill = '#404040';
+		this.healthText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+
 		this.health = game.add.group();
 		this.setHealth(this.player.maxHealth);
 
-		//Setup the text for type
-		this.typeText = game.add.text(600, 1000, 'Type: Null', {fontSize: '32px', fill: '#DBE639'});
+		//Setup the icon for type
+		this.typeText = game.add.text(16,16, 'Type');
 		this.typeText.fixedToCamera = true;
-		this.typeText.cameraOffset.setTo(50,100);
+		this.typeText.cameraOffset.setTo(650,15);
+		this.typeText.font = 'ZCOOL KuaiLe';
+		this.typeText.fill = '#404040';
+		this.typeText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,'noneIcon');
+		this.typeIcon.scale.setTo(0.4,0.4);
+		this.typeIcon.fixedToCamera = true;
+		this.typeIcon.cameraOffset.setTo(650,50);
 
 		//Create the cursor of the game
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
-
-		this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
-		this.ins2 = game.add.text(750, 1450, 'Eat elements to change your form!', {fontSize: '15px', fill: '#DBE639'});
-		this.ins3 = game.add.text(450, 920, 'Kill enemy by bullets!', {fontSize: '15px', fill: '#DBE639'});
+		//Set up some instruction text on the map
+		// this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
+		// this.ins2 = game.add.text(750, 1450, 'Eat elements to change your form!', {fontSize: '15px', fill: '#DBE639'});
+		// this.ins3 = game.add.text(450, 920, 'Kill enemy by bullets!', {fontSize: '15px', fill: '#DBE639'});
 
 
 
@@ -92,7 +102,6 @@ Play.prototype = {
 		game.physics.arcade.collide(this.player, this.wallLayer);
 
 		game.physics.arcade.collide(this.baddie1, this.wallLayer);
-
 
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
@@ -131,10 +140,7 @@ Play.prototype = {
 		this.player.etype = 'fire';
 		this.player.animations.stop(null,true);
 		this.player.resetWeapon('fireBullet');
-		this.typeText.kill();
-		this.typeText = game.add.text(600, 1000, 'Type: Fire', {fontSize: '32px', fill: '#DBE639'});
-		this.typeText.fixedToCamera = true;
-		this.typeText.cameraOffset.setTo(50,100);
+		this.resetType('fireIcon');
 
 	},
 
@@ -172,7 +178,7 @@ Play.prototype = {
 		}
 	},
 
-
+	//This function work when player was hit by baddies
 	hitPlayer:function(){
 		if(this.baddie1.weapon1 != null){
 			this.baddie1.weapon1.bullets.getAt(0).kill();
@@ -188,6 +194,14 @@ Play.prototype = {
 
 		}
 	},
+	//This function work when player change its type
+	resetType:function(type){
+		this.typeIcon.kill();
+		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,type);
+		this.typeIcon.scale.setTo(0.4,0.4);
+		this.typeIcon.fixedToCamera = true;
+		this.typeIcon.cameraOffset.setTo(650,50);
+	},
 	climbLadder:function(){
 		if(this.baddie1 == null){
 			this.bgmMusic.stop();
@@ -199,8 +213,9 @@ Play.prototype = {
 	setHealth:function(health){
 		for(var i = 0; i < health; i++){
 			var hp = game.add.sprite(0,0,'aid');
+			hp.scale.setTo(0.1,0.1);
 			hp.fixedToCamera = true;
-			hp.cameraOffset.setTo(50 + i* 35,50);
+			hp.cameraOffset.setTo(50 + i* 25,50);
 			this.health.add(hp);
 
 		}
