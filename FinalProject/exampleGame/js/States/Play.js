@@ -28,15 +28,14 @@ Play.prototype = {
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 		//Setup other stuff for the game
-		door = game.add.tileSprite(game.world.centerX-155, 1190, 120, 30, "platform");
 		fire = game.add.sprite(game.world.centerX - 530, 1950, 'bonfire');
 		fire.scale.setTo(0.5);
-		ladder = game.add.sprite(game.world.centerX-155,550, 'ladder');
-		game.physics.enable([door,fire,ladder], Phaser.Physics.ARCADE);
+		ladder = game.add.sprite(game.world.centerX-400,850, 'portal');
+		game.physics.enable([fire,ladder], Phaser.Physics.ARCADE);
 		fire.scale.setTo(0.2);
 		ladder.body.immovable = true;
-		door.body.collideWorldBounds = true;
-		door.body.immovable = true;
+		ladder.scale.setTo(0.15);
+		ladder.animations.add('shine', [0,1,2], 10, true);
 
 
 		//Create the player
@@ -47,7 +46,7 @@ Play.prototype = {
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player,this.wallLayer);
 		game.add.existing(this.baddie1);
 
 		//Setup background music
@@ -64,9 +63,8 @@ Play.prototype = {
 		this.healthText.fixedToCamera = true;
 		this.healthText.cameraOffset.setTo(15,15);
 		this.healthText.font = 'ZCOOL KuaiLe';
-		this.healthText.font = 'ZCOOL KuaiLe';
-		this.healthText.fill = '#404040';
-		this.healthText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+		this.healthText.fill = '#ffffff';
+		this.healthText.setShadow(3, 3, 'rgba(1,1,0.8,0.3)', 5);
 
 		this.health = game.add.group();
 		this.setHealth(this.player.maxHealth);
@@ -76,8 +74,9 @@ Play.prototype = {
 		this.typeText.fixedToCamera = true;
 		this.typeText.cameraOffset.setTo(650,15);
 		this.typeText.font = 'ZCOOL KuaiLe';
-		this.typeText.fill = '#404040';
-		this.typeText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+		// this.typeText.fill = '#404040';
+		this.typeText.fill = '#ffffff';
+		this.typeText.setShadow(3, 3, 'rgba(1,1,0.8,0.3)', 5);
 		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,'noneIcon');
 		this.typeIcon.scale.setTo(0.4,0.4);
 		this.typeIcon.fixedToCamera = true;
@@ -86,6 +85,11 @@ Play.prototype = {
 		//Create the cursor of the game
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+
+		// this.title = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
+		// this.title.fixedToCamera = true;
+		// this.title.cameraOffset.setTo(300,300);
+
 
 		//Set up some instruction text on the map
 		// this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
@@ -99,21 +103,21 @@ Play.prototype = {
 	},
 
 	update: function() {
+		ladder.animations.play('shine');
 		game.physics.arcade.collide(this.player, this.wallLayer);
 
-		game.physics.arcade.collide(this.baddie1, this.wallLayer);
+		// game.physics.arcade.collide(this.baddie1, this.wallLayer);
 
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
-		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
 
 
 
-		if(this.player.etype != 'fire'){
-			game.physics.arcade.collide(this.player, door);
-		}else{
-			// game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
-		}
+		// if(this.player.etype != 'fire'){
+		// 	game.physics.arcade.collide(this.player, door);
+		// }else{
+		// 	// game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
+		// }
 
 
 		game.physics.arcade.overlap(this.player, fire, this.killFire, null, this);
@@ -160,15 +164,15 @@ Play.prototype = {
 	hitBaddie:function(){
 		this.player.weapon.bullets.getAt(0).kill();
 		this.baddie1.health -=1;
-		if(this.player.currentDir == 270){
-			this.baddie1.y -= 20;
-		}else if(this.player.currentDir == 0){
-			this.baddie1.x += 20;
-		}else if(this.player.currentDir == 90){
-			this.baddie1.y += 20;
-		}else if(this.player.currentDir == 180){
-			this.baddie1.x -= 20;
-		}
+		// if(this.player.currentDir == 270){
+		// 	this.baddie1.y -= 20;
+		// }else if(this.player.currentDir == 0){
+		// 	this.baddie1.x += 20;
+		// }else if(this.player.currentDir == 90){
+		// 	this.baddie1.y += 20;
+		// }else if(this.player.currentDir == 180){
+		// 	this.baddie1.x -= 20;
+		// }
 		if(this.baddie1.health <= 0) {
 			this.baddie1.weapon1.bullets.getAt(0).kill();
 			this.baddie1.kill();
@@ -183,7 +187,7 @@ Play.prototype = {
 		if(this.baddie1.weapon1 != null){
 			this.baddie1.weapon1.bullets.getAt(0).kill();
 		}
-		this.player.health -= 1;
+		this.player.onHit();
 		this.health.kill();
 		this.health = game.add.group();
 		this.setHealth(this.player.health);

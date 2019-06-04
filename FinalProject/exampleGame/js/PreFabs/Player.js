@@ -35,7 +35,9 @@ function Players(game, x, y, key, frame) {
 	this.animations.add('grassStay', 			[38,38,38,39,39,39], 5, true);// grass stay
 	this.animations.add('grassD', 				[58,59,60,59],5, true);// grass down
 	this.animations.add('grassStay', 			[58,61,62,62,62,63,63,63,62,62,62,63,63,62,62,62,61,58,58,58,58,58,58,58], 5, true);// grass stay
-
+	//This tween will work when player get hit and set into invicible
+	this.flash = game.add.tween(this).to( { alpha: 0 },100, Phaser.Easing.Linear.None, true, 0, 1000, true);
+	this.flash.pause();
 	//Setup the bullet function of the player
 	this.direction = 180;
 	this.weapon = game.add.weapon(0, 'star');
@@ -46,6 +48,7 @@ function Players(game, x, y, key, frame) {
 	this.weapon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
 	this.move = false;
 	this.bulletPos = 0;
+	this.invicible = false;
 
 	// //Setup another bullet funciton for back up
 	// this.bullets = game.add.group();
@@ -62,7 +65,7 @@ function Players(game, x, y, key, frame) {
 	this.shot = game.add.audio('pop');
 	this.shot.volume = 0.3;
 	//Set the element type of player
-	this.etype = null;
+	this.etype = 'none';
 
 	//Set the cursor for controller
 	cursors = game.input.keyboard.createCursorKeys();
@@ -76,8 +79,14 @@ Players.prototype = Object.create(Phaser.Sprite.prototype);
 Players.prototype.constructor = Players;
 
 Players.prototype.update = function(){
+	if(this.invicible){
+		this.flash.resume();
+
+	}else{
+		this.flash.pause();
+		this.alpha = 1;
+	}
 	this.move = false;
-	game.debug.body(this);
 	if(cursors.left.isDown){
 
 			//Move to left
@@ -122,7 +131,7 @@ Players.prototype.update = function(){
 			// if(this.weapon.bullets.getAt(0) != )
 		}
 
-		if(this.etype == null){
+		if(this.etype == 'none'){
 			if(this.move == true){
 				if(this.weapon.fireAngle == 180){
 					this.scale.setTo(-0.2,0.2);
@@ -182,12 +191,74 @@ Players.prototype.update = function(){
 					this.scale.setTo(0.2,0.2);
 					this.animations.play('fireStay');
 				}
+			}
+
+		}else if(this.etype == 'grass'){
+			if(this.move == true){
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('grassType');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('grassD');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('grassD');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('grassType');
+				}
+			}else{
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('grassStay');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('grassDStay');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('grassDStay');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('grassStay');
+				}
+			}
+
+		}else if(this.etype == 'water'){
+			if(this.move == true){
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('waterType');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('waterD');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('waterD');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('waterType');
+				}
+			}else{
+				if(this.weapon.fireAngle == 180){
+					this.scale.setTo(-0.2,0.2);
+					this.animations.play('waterStay');
+				}else if(this.weapon.fireAngle == 90){
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('waterDStay');
+				}else if(this.weapon.fireAngle == 270){
+					this.scale.setTo(0.2,-0.2);
+					this.animations.play('waterDStay');
+				}else {
+					this.scale.setTo(0.2,0.2);
+					this.animations.play('waterStay');
+				}
+			}
 
 		}
 	}
 
 
-}
 Players.prototype.resetWeapon = function(type){
 	//This function will destroy the previous weapon
 	//and setup a new one when player collect elements
@@ -197,3 +268,21 @@ Players.prototype.resetWeapon = function(type){
 	this.weapon.trackSprite(this, 0, 0);
 	this.weapon.fireRate = 1000;
 }
+
+Players.prototype.onHit = function(){
+	if(!this.invicible){
+		console.log('ec');
+		game.time.events.add(0, this.toggleInvincible, this);
+		this.health -= 1;
+		// this.flash.resume();
+		game.time.events.add(2000, this.toggleInvincible, this);
+		// this.flash.pause();
+	}
+}
+
+Players.prototype.toggleInvincible = function(){
+	this.invicible = !this.invicible;
+
+	console.log(this.invicible);
+}
+

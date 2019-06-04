@@ -1,4 +1,4 @@
-function BaddiesA(game, x, y, key, frame, player) {
+function BaddiesA(game, x, y, key, frame, player,layer) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
@@ -10,18 +10,20 @@ function BaddiesA(game, x, y, key, frame, player) {
 	this.maxHealth = 5;
 	this.player = player;
 	this.scale.setTo(0.3,0.3);
-	// this.body.setSize(250,250,200,100);
+	this.body.setSize(100,100,100,75);
+	this.body.bounce.setTo(1,1);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 5;
+	this.speed = 15;
 	this.health = this.maxHealth;
 	this.direction = 180;
-	this.weapon1 = game.add.weapon(1, 'aid');
+	this.weapon1 = game.add.weapon(1, 'treeBullet');
 	this.weapon1.bullets.type = 'bad';
 	this.weapon1.bulletSpeed = 200;
 	this.weapon1.trackSprite(this, 20, 20);
-	this.weapon1.fireRate = 1000;
+	this.weapon1.fireRate = 1800;
 	this.statNow = true;
+	this.layer = layer;
 
 	//Set the animation of the player
 	this.animations.add('stay', [0,1,2,3,4], 5, true);
@@ -88,6 +90,7 @@ BaddiesA.prototype.update = function(){
 			this.weapon1.destroy();
 		}
 	}
+	game.physics.arcade.collide(this, this.layer);
 }
 BaddiesA.prototype.render = function(){
 	 game.debug.body(this);

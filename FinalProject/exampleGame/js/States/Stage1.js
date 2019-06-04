@@ -1,6 +1,5 @@
 Stage1.prototype = {
 	init: function() {
-		health = 3;
 	},
 
 	preload: function() {
@@ -17,38 +16,37 @@ Stage1.prototype = {
 		//Set the tilemap of the game
 		game.stage.setBackgroundColor('#87CEEB');
 		this.map = game.add.tilemap('stage1');
-		this.map.addTilesetImage('Tileset1', 'test');
+		this.map.addTilesetImage('common', 'test');
 
 		//New tilemaplayer object
-		this.groundLayer = this.map.createLayer('Background1');
+		this.groundLayer = this.map.createLayer('BackGround1');
 		this.wallLayer = this.map.createLayer('Collision1');
-		this.decoLayer = this.map.createLayer('Decoration1');
 		this.groundLayer.resizeWorld();
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 		//Setup other stuff for the game
-		door = game.add.tileSprite(830, 1325, 100, 10, "platform");
-		fire = game.add.sprite(750, 1500, 'fire');
-		ladder = game.add.sprite(450,950, 'ladder');
-		game.physics.enable([door,fire,ladder], Phaser.Physics.ARCADE);
-		fire.scale.setTo(0.2);
-		ladder.body.immovable = true;
-		door.body.collideWorldBounds = true;
-		door.body.immovable = true;
+		this.fire = game.add.sprite(750, 2300, 'bonfire');
+		this.ladder = game.add.sprite(450,950, 'ladder');
+		game.physics.enable([this.fire,this.ladder], Phaser.Physics.ARCADE);
+		this.fire.scale.setTo(0.2);
+		this.ladder.body.immovable = true;
+
 
 
 		//Set player
 		//Create the player
-		this.player = new Players(game, game.world.centerX, game.world.centerY, 'slime', 1);
+		this.player = new Players(game, 750, 2700, 'slimeAll', 1);
 		game.add.existing(this.player);
 		game.camera.follow(this.player);
 
+		this.createWater(6,6,475,2365);
+
 		//Create baddies in this stage
 		this.enemies = game.add.group();
-		this.addBaddies(this.enemies, 700, 700);
-		this.addBaddies(this.enemies, 900, 900);
-		this.addBaddies(this.enemies, 500, 500);
-		this.addBaddies(this.enemies, 1000, 800);
+		this.addBaddies(this.enemies, 1300, 1900);
+		this.addBaddies(this.enemies, 1400, 2000);
+		this.addBaddies(this.enemies, 1500, 1950);
+		this.addBaddies(this.enemies, 1600, 1800);
 
 		//Setup background music
 		this.bgmMusic = game.add.audio('bgm');
@@ -60,14 +58,28 @@ Stage1.prototype = {
 
 		//Setup the Hud here
 		//Setup the text for health
-		this.healthText = game.add.text(600, 1000, 'Health: 3', {fontSize: '32px', fill: '#000'});
+		this.healthText = game.add.text(16, 16, 'HP:');
 		this.healthText.fixedToCamera = true;
-		this.healthText.cameraOffset.setTo(50,50);
+		this.healthText.cameraOffset.setTo(15,15);
+		this.healthText.font = 'ZCOOL KuaiLe';
+		this.healthText.fill = '#404040';
+		this.healthText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
 
-		//Setup the text for type
-		this.typeText = game.add.text(600, 1000, 'Type: Null', {fontSize: '32px', fill: '#000'});
+		this.health = game.add.group();
+		this.setHealth(this.player.maxHealth);
+
+
+		//Setup the icon for type
+		this.typeText = game.add.text(16,16, 'TYPE');
 		this.typeText.fixedToCamera = true;
-		this.typeText.cameraOffset.setTo(50,100);
+		this.typeText.cameraOffset.setTo(650,15);
+		this.typeText.font = 'ZCOOL KuaiLe';
+		this.typeText.fill = '#404040';
+		this.typeText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,'noneIcon');
+		this.typeIcon.scale.setTo(0.4,0.4);
+		this.typeIcon.fixedToCamera = true;
+		this.typeIcon.cameraOffset.setTo(650,50);
 
 		//Create the cursor of the game
 		cursors = game.input.keyboard.createCursorKeys();
@@ -92,67 +104,108 @@ Stage1.prototype = {
 
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
-		game.physics.arcade.collide(this.player.weapon.bullets, door, this.hitWall, null, this);
+		game.physics.arcade.overlap(this.player, this.fire, this.killFire, null, this);
 
-		if(this.player.etype != 'fire'){
-			game.physics.arcade.collide(this.player, door);
-		}
-		// }else{
-		// 	game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
-		// }
+		game.physics.arcade.overlap(this.player, this.ladder, this.climbLadder, null, this);
 
-
-		game.physics.arcade.overlap(this.player, fire, this.killFire, null, this);
-
-		// game.physics.arcade.overlap(this.player.weapon.bullets, enemies, this.hitBaddie, null, this);
-
-		game.physics.arcade.overlap(this.player, ladder, this.climbLadder, null, this);
+		game.physics.arcade.overlap(this.enemies, this.player, this.hitPlayer, null, this);
 
 		this.player.animations.play('run');
 
 	},
 	killFire: function(){
-		fire.kill();
+		this.fire.kill();
 		this.player.etype = 'fire';
-		this.player.resetWeapon('diamond');
-		this.typeText.kill();
-		this.typeText = game.add.text(600, 1000, 'Type: Fire', {fontSize: '32px', fill: '#000'});
-		this.typeText.fixedToCamera = true;
-		this.typeText.cameraOffset.setTo(50,100);
-		console.log(this.typeText);
+		this.player.animations.stop(null,true);
+		this.player.resetWeapon('fireBullet');
+		this.resetType('fireIcon');
+
 	},
 
-	openDoor: function(){
-		if(this.player.etype == 'fire'){
-			door.kill();
-		}
-		this.openMusic.play();
-		this.player.weapon.bullets.getAt(0).kill();
-	},
 
 	//Call back function when bullets hit on to the Wall
 	hitWall:function(){
 		this.player.weapon.bullets.getAt(0).kill();
 	},
 
+	hitBaddie:function(){
+		this.player.weapon.bullets.getAt(0).kill();
+		this.baddie1.health -=1;
+		if(this.player.currentDir == 270){
+			this.baddie1.y -= 20;
+		}else if(this.player.currentDir == 0){
+			this.baddie1.x += 20;
+		}else if(this.player.currentDir == 90){
+			this.baddie1.y += 20;
+		}else if(this.player.currentDir == 180){
+			this.baddie1.x -= 20;
+		}
+		if(this.baddie1.health <= 0) {
+			this.baddie1.weapon1.bullets.getAt(0).kill();
+			this.baddie1.kill();
+			this.baddie1.statNow = false;
 
+			this.baddie1 = null;
+		}
+	},
+
+	//This function work when player was hit by baddies
+	hitPlayer:function(){
+		this.player.onHit();
+		this.health.kill();
+		this.health = game.add.group();
+		this.setHealth(this.player.health);
+
+		if(this.player.health <= 0){
+			this.bgmMusic.stop();
+			game.state.start('GameOver');
+
+		}
+	},
+	//This function work when player change its type
+	resetType:function(type){
+		this.typeIcon.kill();
+		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,type);
+		this.typeIcon.scale.setTo(0.4,0.4);
+		this.typeIcon.fixedToCamera = true;
+		this.typeIcon.cameraOffset.setTo(650,50);
+	},
 	climbLadder:function(){
 		if(this.baddie1 == null){
 			this.bgmMusic.stop();
-			game.state.start('GameOver');
+			game.state.start('Stage1');
+
 		}
 		console.log(this.baddie1);
 	},
+	setHealth:function(health){
+		for(var i = 0; i < health; i++){
+			var hp = game.add.sprite(0,0,'aid');
+			hp.scale.setTo(0.1,0.1);
+			hp.fixedToCamera = true;
+			hp.cameraOffset.setTo(50 + i* 25,50);
+			this.health.add(hp);
+
+		}
+
+	},
+	baddyHitWall:function(){
+		if(this.baddie1.statNow != false){
+			this.baddie1.weapon1.bullets.getAt(0).kill();
+		}
+	},
 	addBaddies:function(group, x, y){
-		var baddy = new Baddies(game, x, y, 'fireSpirit', 1, this.player);
+		var baddy = new Baddies(game, x, y, 'fireSprite', 1, this.player);
 		game.add.existing(baddy);
 		group.add(baddy);
 	},
-	// baddyHitWall:function(){
-	// 	this.baddie1.weapon.bullets.getAt(0).kill();
-	// },
-	//Debug the collision from tile map
-	render:function(){
+	createWater:function(x,y,posX,posY){
+		for(var i = 0; i < y; ++i){
+			for(var j = 0; j < x; ++j){
+				var wat = new Water(game, posX + j*32, posY + i*32, 'water', 1, this.player);
+				game.add.existing(wat);
+			}
+		}
 	}
 
 

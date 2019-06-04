@@ -9,11 +9,11 @@ function Baddies(game, x, y, key, frame, player) {
 	this.body.collideWorldBounds = true;
 	this.maxHealth = 5;
 	this.player = player;
-	this.scale.setTo(1.5,1.5);
-	this.body.setSize(20,20,13,15);
+	this.scale.setTo(0.2,0.2);
+	this.body.setSize(125,125,90,100);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 15;
+	this.speed = 25;
 	this.health = this.maxHealth;
 	this.statNow = true;
 
@@ -58,21 +58,22 @@ Baddies.prototype.update = function(){
 	var chasing = false;
 
 	if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 300){
-		if(this.player.x > this.x){
+		if(this.player.x - 25 > this.x){
 			this.body.velocity.x = this.speed;
-		}else if(this.player.x < this.x){
+		}else if(this.player.x - 25 < this.x){
 			this.body.velocity.x = -this.speed;
 		}
 
-		if(this.player.y > this.y){
+		if(this.player.y - 25 > this.y){
 			this.body.velocity.y = this.speed;
-		}else if (this.player.y < this.y){
+		}else if (this.player.y - 25 < this.y){
 			this.body.velocity.y = -this.speed;
 		}
 		var chasing = true;
 	}
 	game.physics.arcade.overlap(this.player.weapon.bullets, this, this.getHit, null, this);
-}
+	}
+	game.debug.body(this);
 }
 
 Baddies.prototype.getHit = function(){
