@@ -1,4 +1,4 @@
-function Baddies(game, x, y, key, frame, player) {
+function Baddies(game, x, y, key, frame, player,layer,state) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
@@ -13,9 +13,11 @@ function Baddies(game, x, y, key, frame, player) {
 	this.body.setSize(125,125,90,100);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 25;
+	this.speed = 50;
 	this.health = this.maxHealth;
 	this.statNow = true;
+	this.state = state;
+	this.layer = layer;
 
 
 	//Set the animation of the player
@@ -73,7 +75,8 @@ Baddies.prototype.update = function(){
 	}
 	game.physics.arcade.overlap(this.player.weapon.bullets, this, this.getHit, null, this);
 	}
-	game.debug.body(this);
+	game.physics.arcade.overlap(this, this.player, this.hitPlayer, null, this);
+	game.physics.arcade.collide(this, this.layer);
 }
 
 Baddies.prototype.getHit = function(){
@@ -90,10 +93,19 @@ Baddies.prototype.getHit = function(){
 		}
 		if(this.health <= 0) {
 			this.kill();
+			this.state.count -= 1;
 			this.statNow = false;
 		}
 }
 
-Baddies.prototype.hitBounce = function(dir){
+Baddies.prototype.hitPlayer = function(){
+	this.player.onHit();
+	this.state.health.kill();
+	this.state.health = game.add.group();
+	this.state.setHealth(this.player.health);
+	if(this.player.health <= 0){
+			this.state.bgmMusic.stop();
+
+		}
 
 }

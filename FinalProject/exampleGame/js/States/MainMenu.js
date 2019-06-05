@@ -48,7 +48,7 @@ MainMenu.prototype = {
 	update: function(){
 		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
 			//Press the space to start the play state
-			game.state.start('Stage0');
+			game.state.start('Stage1');
 		}
 		if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
 			this.choose.cameraOffset.setTo(200,600);

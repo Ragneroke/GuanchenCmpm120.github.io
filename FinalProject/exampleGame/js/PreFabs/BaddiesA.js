@@ -17,7 +17,7 @@ function BaddiesA(game, x, y, key, frame, player,layer,state) {
 	this.speed = 15;
 	this.health = this.maxHealth;
 	this.direction = 180;
-	this.weapon1 = game.add.weapon(1, 'treeBullet');
+	this.weapon1 = game.add.weapon(1, 'grassBullet');
 	this.weapon1.bullets.type = 'bad';
 	this.weapon1.bulletSpeed = 200;
 	this.weapon1.trackSprite(this, 20, 20);
@@ -65,7 +65,7 @@ BaddiesA.prototype.update = function(){
 		this.animations.play('stay');
 		var chasing = false;
 
-		if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 300){
+		if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 400){
 			if(this.player.x- 25 > this.x){
 				this.body.velocity.x = this.speed;
 				this.weapon1.fireAngle = 0;
@@ -94,6 +94,7 @@ BaddiesA.prototype.update = function(){
 	game.physics.arcade.collide(this, this.layer);
 	game.physics.arcade.overlap(this.weapon1.bullets, this.player, this.hitPlayer, null, this);
 	game.physics.arcade.collide(this.weapon1.bullets, this.layer, this.hitWall, null, this);
+	game.physics.arcade.overlap(this.player.weapon.bullets, this, this.getHit, null, this);
 }
 BaddiesA.prototype.hitPlayer = function(){
 	if(this.weapon1 != null){
@@ -114,4 +115,22 @@ BaddiesA.prototype.render = function(){
 }
 BaddiesA.prototype.hitWall = function(){
 	this.weapon1.bullets.getAt(0).kill();
+}
+BaddiesA.prototype.getHit = function(){
+	this.health -= 1;
+	this.player.weapon.bullets.getAt(0).kill();
+	if(this.player.currentDir == 270){
+			this.y -= 20;
+		}else if(this.player.currentDir == 0){
+			this.x +=20;
+		}else if(this.player.currentDir == 90){
+			this.y +=20;
+		}else if(this.player.currentDir == 180){
+			this.x -=20;
+		}
+		if(this.health <= 0) {
+			this.state.count -= 1;
+			this.kill();
+			this.statNow = false;
+		}
 }

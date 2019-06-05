@@ -8,9 +8,13 @@ Stage1.prototype = {
 	},
 
 	create: function() {
+		stageCount += 1;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		//Set up bounds of world
 		game.world.setBounds(0, 0, 1600, 1600);
+
+		//Count the total enemies in this level
+		this.count = 4;
 
 
 		//Set the tilemap of the game
@@ -30,7 +34,9 @@ Stage1.prototype = {
 		//Create terrain of this level
 		this.createWater(6,6,430,2365);
 
-
+		//Set the portal of this level
+		this.portal1 = new Portal(game,350,2400, 'portal', 1, this.player,1, this);
+		game.add.existing(this.portal1);
 		//Set player
 		//Create the player
 		game.add.existing(this.player);
@@ -39,6 +45,10 @@ Stage1.prototype = {
 		//Set up collectable element in the map
 		this.fire1 = new BonFire(game,750, 2400, 'bonfire', 1, this.player);
 		game.add.existing(this.fire1);
+
+		this.grass1 = new Grass(game,1500, 2000, 'seed', 1, this.player);
+		this.grassStatus = false;
+		// game.add.existing(this.grass1);
 
 
 		//Create baddies in this stage
@@ -62,7 +72,7 @@ Stage1.prototype = {
 		this.healthText.fixedToCamera = true;
 		this.healthText.cameraOffset.setTo(15,15);
 		this.healthText.font = 'ZCOOL KuaiLe';
-		this.healthText.fill = '#404040';
+		this.healthText.fill = '#ffffff';
 		this.healthText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
 
 		this.health = game.add.group();
@@ -75,7 +85,9 @@ Stage1.prototype = {
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
 		//Set Instructions
-		this.ins3 = game.add.text(450, 920, 'Kill all enemies to continue!!', {fontSize: '15px', fill: '#000'});
+		this.insText1 = game.add.text(600 ,2400 , 'Change to grass type to cross river!');
+		this.insText1.font = 'ZCOOL KuaiLe';
+		this.insText1.fill = '#000000';
 
 		//Set up a level title to this stage
 		this.level = game.add.sprite(0,0,'level2');
@@ -85,36 +97,19 @@ Stage1.prototype = {
 
 
 
-
 	},
 
-	update: function() {
-
-		game.physics.arcade.collide(this.player, this.wallLayer);
-
-		game.physics.arcade.collide(this.enemies, this.wallLayer);
-
+	update: function() { 
 		game.physics.arcade.collide(this.enemies, this.enemies);
-
-		game.physics.arcade.overlap(this.enemies, this.player, this.hitPlayer, null, this);
-
-		this.player.animations.play('run');
-
-	},
-
-	//This function work when player was hit by baddies
-	hitPlayer:function(){
-		this.player.onHit();
-		this.health.kill();
-		this.health = game.add.group();
-		this.setHealth(this.player.health);
-
-		if(this.player.health <= 0){
-			this.bgmMusic.stop();
-			game.state.start('GameOver');
-
+		this.portal1.count = this.count;
+		if(this.count == 0){
+			if(this.grassStatus == false){
+				game.add.existing(this.grass1);
+				this.grassStatus == false;
+			}
 		}
 	},
+
 
 	setHealth:function(health){
 		for(var i = 0; i < health; i++){
@@ -128,7 +123,7 @@ Stage1.prototype = {
 
 	},
 	addBaddies:function(group, x, y){
-		var baddy = new Baddies(game, x, y, 'fireSprite', 1, this.player);
+		var baddy = new Baddies(game, x, y, 'fireSprite', 1, this.player, this.wallLayer, this);
 		game.add.existing(baddy);
 		group.add(baddy);
 	},

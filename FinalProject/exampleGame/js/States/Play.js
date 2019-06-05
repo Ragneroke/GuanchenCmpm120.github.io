@@ -40,7 +40,7 @@ Play.prototype = {
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player,this.wallLayer,this);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 900, 'leafSprite', 1, this.player,this.wallLayer,this);
 		game.add.existing(this.baddie1);
 
 		//Set up collectable element in the map
@@ -83,50 +83,26 @@ Play.prototype = {
 		this.level.cameraOffset.setTo(0,0);
 		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);
 
+		//Set up instruction for first level
+
+		this.insText1 = game.add.text(game.world.centerX - 500,1800, '←↑→↓ to move!');
+		this.insText1.font = 'ZCOOL KuaiLe';
+		this.insText1.fill = '#000000';
+
+		this.insText2 = game.add.text(game.world.centerX - 500,1550, 'Absorb Element to get Bullets!');
+		this.insText2.font = 'ZCOOL KuaiLe';
+		this.insText2.fill = '#000000';
+
+		this.insText3 = game.add.text(game.world.centerX - 300,900, 'Defeat all enemies to activate the portal!');
+		this.insText3.font = 'ZCOOL KuaiLe';
+		this.insText3.fill = '#000000';
 
 
 
 	},
 
 	update: function() {
-
-		game.physics.arcade.collide(this.player, this.wallLayer);
-
-		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
-
-		// if(this.baddie1 != null){
-		// 	game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
-		// }
-
-		game.physics.arcade.overlap(this.player.weapon.bullets, this.baddie1, this.hitBaddie, null, this);
-
-	},
-
-	//Call back function when bullets hit on to the Wall
-	hitWall:function(){
-		this.player.weapon.bullets.getAt(0).kill();
-	},
-
-	hitBaddie:function(){
-		this.player.weapon.bullets.getAt(0).kill();
-		this.baddie1.health -=1;
-		if(this.player.currentDir == 270){
-			this.baddie1.y -= 20;
-		}else if(this.player.currentDir == 0){
-			this.baddie1.x += 20;
-		}else if(this.player.currentDir == 90){
-			this.baddie1.y += 20;
-		}else if(this.player.currentDir == 180){
-			this.baddie1.x -= 20;
-		}
-		if(this.baddie1.health <= 0) {
-			this.baddie1.weapon1.bullets.getAt(0).kill();
-			this.baddie1.kill();
-			this.baddie1.statNow = false;
-			this.portal1.count -= 1;
-
-			this.baddie1 = null;
-		}
+		this.portal1.count = this.count;
 	},
 
 	setHealth:function(health){
@@ -140,11 +116,6 @@ Play.prototype = {
 		}
 
 	},
-	// baddyHitWall:function(){
-	// 	if(this.baddie1.statNow != false){
-	// 		this.baddie1.weapon1.bullets.getAt(0).kill();
-	// 	}
-	// },
 	//Debug the collision from tile map
 	render:function(){
 		// game.debug.body(this.baddie1);

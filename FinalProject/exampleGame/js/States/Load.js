@@ -9,12 +9,14 @@ Load.prototype = {
 		game.load.image('diamond', 'assets/img/diamond.png');
 		game.load.image('fireBullet', 'assets/img/fireBullets.png');
 		game.load.image('waterBullet', 'assets/img/waterbullet.png');
-		game.load.image('treeBullet', 'assets/img/treebullet.png');
+		game.load.image('grassBullet', 'assets/img/treebullet.png');
 		game.load.image('noneIcon', 'assets/img/noneIcon.png');
 		game.load.image('fireIcon', 'assets/img/fireIcon.png');
 		game.load.image('waterIcon', 'assets/img/waterIcon.png');
-		game.load.image('treeIcon', 'assets/img/treeIcon.png');
+		game.load.image('grassIcon', 'assets/img/treeIcon.png');
 		game.load.atlas('bonfire', 'assets/img/bonfire.png', 'assets/img/bonfire.json');
+		game.load.atlas('seed', 'assets/img/seed.png', 'assets/img/seed.json');
+		game.load.atlas('waterSplash', 'assets/img/splashwater.png', 'assets/img/splashwater.json');
 		game.load.image('start', 'assets/img/start.png');
 		game.load.image('credit', 'assets/img/credits.png');
 		game.load.image('choose', 'assets/img/choose.png');
@@ -25,6 +27,8 @@ Load.prototype = {
 		game.load.audio('pop', 'assets/audio/pop.ogg');
 		game.load.audio('open', 'assets/audio/open.wav');
 		game.load.audio('finish', 'assets/audio/finish.wav');
+		game.load.audio('gethit', 'assets/audio/gethit.wav');
+		game.load.audio('collect', 'assets/audio/collect.wav');
 		game.load.spritesheet('fireSpirit', 'assets/img/messy.png',37,32);
 		game.load.spritesheet('ladder', 'assets/img/ladder.png',32,32);
 		game.load.atlas('iceSprite', 'assets/img/iceSprite.png', 'assets/img/iceSprite.json');

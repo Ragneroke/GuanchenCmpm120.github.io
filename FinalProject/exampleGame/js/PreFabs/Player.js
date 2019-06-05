@@ -29,13 +29,13 @@ function Players(game, x, y, key, frame,wallLayer) {
 
 	this.animations.add('waterType', 			[27,20,21,22,23,24,25,26], 10, true);
 	this.animations.add('waterStay', 			[28,28,28,29,29,29], 5, true);// water stay
-	this.animations.add('waterD', 				[52,53,54,53],5, true);// water down
-	this.animations.add('waterDStay',			[52,55,56,56,56,57,57,57,56,56,56,57,57,56,56,56,55,52,52,52,52,52,52,52], 5, true);// water stay
+	this.animations.add('waterD', 				[58,59,60,59],5, true);// water down
+	this.animations.add('waterDStay',			[58,61,62,62,62,63,63,63,62,62,62,63,63,62,62,62,61,58,58,58,58,58,58,58], 5, true);// water stay
 
 	this.animations.add('grassType', 			[37,30,31,32,33,34,35,36], 10, true);
 	this.animations.add('grassStay', 			[38,38,38,39,39,39], 5, true);// grass stay
-	this.animations.add('grassD', 				[58,59,60,59],5, true);// grass down
-	this.animations.add('grassStay', 			[58,61,62,62,62,63,63,63,62,62,62,63,63,62,62,62,61,58,58,58,58,58,58,58], 5, true);// grass stay
+	this.animations.add('grassD', 				[52,53,54,53],5, true);// grass down
+	this.animations.add('grassDStay', 			[52,55,56,56,56,57,57,57,56,56,56,57,57,56,56,56,55,52,52,52,52,52,52,52], 5, true);// grass stay
 	//This tween will work when player get hit and set into invicible
 	this.flash = game.add.tween(this).to( { alpha: 0 },100, Phaser.Easing.Linear.None, true, 0, 1000, true);
 	this.flash.pause();
@@ -65,6 +65,8 @@ function Players(game, x, y, key, frame,wallLayer) {
 	//Set music for player
 	this.shot = game.add.audio('pop');
 	this.shot.volume = 0.3;
+	this.hit = game.add.audio('gethit');
+	this.hit.volume = 0.3;
 	//Set the element type of player
 	this.etype = 'none';
 
@@ -95,6 +97,8 @@ Players.prototype.constructor = Players;
 Players.prototype.update = function(){
 
 	game.physics.arcade.collide(this.weapon.bullets, this.wallLayer, this.hitWall, null, this);
+	game.physics.arcade.collide(this, this.wallLayer);
+
 
 	if(this.health <= 0){
 		game.state.start('GameOver');
@@ -107,37 +111,43 @@ Players.prototype.update = function(){
 		this.alpha = 1;
 	}
 	this.move = false;
+	if(cursors.up.isDown){
+			if(!this.move){
+				this.body.velocity.y = - 130;
+				this.weapon.fireAngle = 270;
+				this.body.velocity.x = 0;
+				this.move = true;
+			}
+		}
 	if(cursors.left.isDown){
 
 			//Move to left
-			this.body.velocity.x = -130;
-			this.weapon.fireAngle = 180;
-			this.body.velocity.y = 0;
-			this.move = true;
+			if(!this.move){
+				this.body.velocity.x = -130;
+				this.weapon.fireAngle = 180;
+				this.body.velocity.y = 0;
+				this.move = true;
+			}
 		}
 		if(cursors.right.isDown){
 
 			//Move to right
-			this.body.velocity.x = 130;
+			if(!this.move){
+				this.body.velocity.x = 130;
 
-			this.weapon.fireAngle = 0;
-			this.body.velocity.y = 0;
-			this.move = true;
-		}
-		if(cursors.up.isDown){
-
-			this.body.velocity.y = - 130;
-			this.weapon.fireAngle = 270;
-			this.body.velocity.x = 0;
-			this.move = true;
+				this.weapon.fireAngle = 0;
+				this.body.velocity.y = 0;
+				this.move = true;
+			}
 		}
 		if(cursors.down.isDown){
 
-
-			this.body.velocity.y = 130;
-			this.weapon.fireAngle = 90;
-			this.body.velocity.x = 0;
-			this.move = true;
+			if(!this.move){
+				this.body.velocity.y = 130;
+				this.weapon.fireAngle = 90;
+				this.body.velocity.x = 0;
+				this.move = true;
+			}
 		}
 		if(!this.move){
 			this.body.velocity.x = 0;
@@ -227,6 +237,7 @@ Players.prototype.update = function(){
 					this.animations.play('grassD');
 				}else {
 					this.scale.setTo(0.2,0.2);
+					// console.log('check');
 					this.animations.play('grassType');
 				}
 			}else{
@@ -241,6 +252,7 @@ Players.prototype.update = function(){
 					this.animations.play('grassDStay');
 				}else {
 					this.scale.setTo(0.2,0.2);
+					console.log('check');
 					this.animations.play('grassStay');
 				}
 			}
@@ -292,9 +304,9 @@ Players.prototype.resetWeapon = function(type){
 
 Players.prototype.onHit = function(){
 	if(!this.invicible){
-		console.log('ec');
 		game.time.events.add(0, this.toggleInvincible, this);
 		this.health -= 1;
+		this.hit.play();
 		game.time.events.add(2000, this.toggleInvincible, this);
 	}
 }

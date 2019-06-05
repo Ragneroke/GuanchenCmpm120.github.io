@@ -1,4 +1,4 @@
-function BonFire(game, x, y, key, frame, player){
+function Grass(game, x, y, key, frame, player){
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
@@ -10,19 +10,19 @@ function BonFire(game, x, y, key, frame, player){
 	this.collect.volume = 0.3;
 }
 
-BonFire.prototype = Object.create(Phaser.Sprite.prototype);
-BonFire.prototype.constructor = BonFire;
-BonFire.prototype.update = function(){
-	game.physics.arcade.overlap(this, this.player, this.hitFire, null, this);
+Grass.prototype = Object.create(Phaser.Sprite.prototype);
+Grass.prototype.constructor = Grass;
+Grass.prototype.update = function(){
+	game.physics.arcade.overlap(this, this.player, this.hitGrass, null, this);
 	this.animations.play('stay');
 }
 
-BonFire.prototype.hitFire = function(){
-		this.player.etype = 'fire';
+Grass.prototype.hitGrass = function(){
+		this.player.etype = 'grass';
 		this.collect.play();
 		this.player.animations.stop(null,true);
-		this.player.resetWeapon('fireBullet');
-		this.player.resetType('fireIcon');
+		this.player.resetWeapon('grassBullet');
+		this.player.resetType('grassIcon');
 		this.kill();
 
 }
