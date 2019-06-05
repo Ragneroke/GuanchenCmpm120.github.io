@@ -1,4 +1,4 @@
-function BaddiesA(game, x, y, key, frame, player,layer) {
+function BaddiesA(game, x, y, key, frame, player,layer,state) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
@@ -24,6 +24,7 @@ function BaddiesA(game, x, y, key, frame, player,layer) {
 	this.weapon1.fireRate = 1800;
 	this.statNow = true;
 	this.layer = layer;
+	this.state = state;
 
 	//Set the animation of the player
 	this.animations.add('stay', [0,1,2,3,4], 5, true);
@@ -65,18 +66,18 @@ BaddiesA.prototype.update = function(){
 		var chasing = false;
 
 		if(Math.sqrt(Math.pow(this.player.x - this.x,2) + Math.pow(this.player.y - this.y,2)) < 300){
-			if(this.player.x > this.x){
+			if(this.player.x- 25 > this.x){
 				this.body.velocity.x = this.speed;
 				this.weapon1.fireAngle = 0;
-			}else if(this.player.x < this.x){
+			}else if(this.player.x - 25< this.x){
 				this.body.velocity.x = -this.speed;
 				this.weapon1.fireAngle = 180;
 			}
 
-			if(this.player.y > this.y){
+			if(this.player.y - 25> this.y){
 				this.body.velocity.y = this.speed;
 				this.weapon1.fireAngle = 90;
-			}else if (this.player.y < this.y){
+			}else if (this.player.y - 25< this.y){
 				this.body.velocity.y = -this.speed;
 				this.weapon1.fireAngle = 270;
 			}
@@ -91,7 +92,26 @@ BaddiesA.prototype.update = function(){
 		}
 	}
 	game.physics.arcade.collide(this, this.layer);
+	game.physics.arcade.overlap(this.weapon1.bullets, this.player, this.hitPlayer, null, this);
+	game.physics.arcade.collide(this.weapon1.bullets, this.layer, this.hitWall, null, this);
+}
+BaddiesA.prototype.hitPlayer = function(){
+	if(this.weapon1 != null){
+			this.weapon1.bullets.getAt(0).kill();
+		}
+		this.player.onHit();
+		this.state.health.kill();
+		this.state.health = game.add.group();
+		this.state.setHealth(this.player.health);
+
+		if(this.player.health <= 0){
+			this.state.bgmMusic.stop();
+
+		}
 }
 BaddiesA.prototype.render = function(){
 	 game.debug.body(this);
+}
+BaddiesA.prototype.hitWall = function(){
+	this.weapon1.bullets.getAt(0).kill();
 }

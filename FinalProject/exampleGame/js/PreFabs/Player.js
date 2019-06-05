@@ -1,9 +1,10 @@
-function Players(game, x, y, key, frame) {
+function Players(game, x, y, key, frame,wallLayer) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Player = this;
 	this.anchor.set(0.5);
 	this.scale.setTo(0.2,0.2);
+	this.wallLayer = wallLayer;
 
 
 	//Setup the basic physics of players
@@ -72,6 +73,19 @@ function Players(game, x, y, key, frame) {
 	fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 	testButton = game.input.keyboard.addKey(Phaser.KeyCode.A);
 
+	//Setup the icon for type
+	this.typeText = game.add.text(16,16, 'Type');
+	this.typeText.fixedToCamera = true;
+	this.typeText.cameraOffset.setTo(650,15);
+	this.typeText.font = 'ZCOOL KuaiLe';
+	// this.typeText.fill = '#404040';
+	this.typeText.fill = '#ffffff';
+	this.typeText.setShadow(3, 3, 'rgba(1,1,0.8,0.3)', 5);
+	this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,'noneIcon');
+	this.typeIcon.scale.setTo(0.4,0.4);
+	this.typeIcon.fixedToCamera = true;
+	this.typeIcon.cameraOffset.setTo(650,50);
+
 
 }
 
@@ -79,6 +93,12 @@ Players.prototype = Object.create(Phaser.Sprite.prototype);
 Players.prototype.constructor = Players;
 
 Players.prototype.update = function(){
+
+	game.physics.arcade.collide(this.weapon.bullets, this.wallLayer, this.hitWall, null, this);
+
+	if(this.health <= 0){
+		game.state.start('GameOver');
+	}
 	if(this.invicible){
 		this.flash.resume();
 
@@ -127,8 +147,9 @@ Players.prototype.update = function(){
 			//Fire the Weapon
 			this.weapon.fire();
 			this.currentDir = this.weapon.fireAngle;
-			this.shot.play();
-			// if(this.weapon.bullets.getAt(0) != )
+			if(this.etype != 'none'){
+				this.shot.play();
+			}
 		}
 
 		if(this.etype == 'none'){
@@ -274,9 +295,7 @@ Players.prototype.onHit = function(){
 		console.log('ec');
 		game.time.events.add(0, this.toggleInvincible, this);
 		this.health -= 1;
-		// this.flash.resume();
 		game.time.events.add(2000, this.toggleInvincible, this);
-		// this.flash.pause();
 	}
 }
 
@@ -284,5 +303,17 @@ Players.prototype.toggleInvincible = function(){
 	this.invicible = !this.invicible;
 
 	console.log(this.invicible);
+}
+
+Players.prototype.resetType = function(type){
+	this.typeIcon.kill();
+	this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,type);
+	this.typeIcon.scale.setTo(0.4,0.4);
+	this.typeIcon.fixedToCamera = true;
+	this.typeIcon.cameraOffset.setTo(650,50);
+}
+
+Players.prototype.hitWall = function(){
+	this.weapon.bullets.getAt(0).kill();
 }
 

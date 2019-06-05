@@ -14,10 +14,13 @@ Load.prototype = {
 		game.load.image('fireIcon', 'assets/img/fireIcon.png');
 		game.load.image('waterIcon', 'assets/img/waterIcon.png');
 		game.load.image('treeIcon', 'assets/img/treeIcon.png');
-		game.load.image('bonfire', 'assets/img/bonfire.png');
+		game.load.atlas('bonfire', 'assets/img/bonfire.png', 'assets/img/bonfire.json');
 		game.load.image('start', 'assets/img/start.png');
 		game.load.image('credit', 'assets/img/credits.png');
 		game.load.image('choose', 'assets/img/choose.png');
+		game.load.image('level1', 'assets/img/level.png');
+		game.load.image('level2', 'assets/img/level2.png');
+		game.load.image('gameOver', 'assets/img/GameOver.png');
 		game.load.audio('bgm', 'assets/audio/fish.mp3');
 		game.load.audio('pop', 'assets/audio/pop.ogg');
 		game.load.audio('open', 'assets/audio/open.wav');
@@ -40,7 +43,7 @@ Load.prototype = {
 		game.load.image('stage0m', 'assets/tileTest/stage0.png');
 		game.load.image('stage1m', 'assets/tileTest/stage1.png');
 		game.load.image('title', 'assets/img/gameTitle.png');
-		game.stage.backgroundColor = "#facade";
+		game.stage.backgroundColor = "#000000";
 
 	},
 	create: function(){

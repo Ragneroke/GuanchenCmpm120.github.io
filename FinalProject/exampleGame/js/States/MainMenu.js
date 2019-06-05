@@ -12,6 +12,7 @@ MainMenu.prototype = {
 		game.world.setBounds(0, 0, 1600, 1600);
 
 
+
 		//Set the tilemap of the game
 		game.stage.setBackgroundColor('#87CEEB');
 		this.map = game.add.tilemap('stage0');

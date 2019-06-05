@@ -15,6 +15,9 @@ Play.prototype = {
 		//Set up bounds of world
 		game.world.setBounds(0, 0, 1600, 1600);
 
+		//Set up the total enemies numbers
+		this.count = 1;
+
 
 		//Set the tilemap of the game
 		game.stage.setBackgroundColor('#87CEEB');
@@ -27,27 +30,26 @@ Play.prototype = {
 		this.groundLayer.resizeWorld();
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
-		//Setup other stuff for the game
-		fire = game.add.sprite(game.world.centerX - 530, 1950, 'bonfire');
-		fire.scale.setTo(0.5);
-		ladder = game.add.sprite(game.world.centerX-400,850, 'portal');
-		game.physics.enable([fire,ladder], Phaser.Physics.ARCADE);
-		fire.scale.setTo(0.2);
-		ladder.body.immovable = true;
-		ladder.scale.setTo(0.15);
-		ladder.animations.add('shine', [0,1,2], 10, true);
 
 
 		//Create the player
-		this.player = new Players(game, game.world.centerX-300, 1900, 'slimeAll', 1);
+		this.player = new Players(game, game.world.centerX-300, 1900, 'slimeAll', 1,this.wallLayer);
 		game.add.existing(this.player);
 		game.camera.follow(this.player);
 
 
 		//Create baddies in this stage
 
-		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player,this.wallLayer);
+		this.baddie1 = new BaddiesA(game, game.world.centerX, 850, 'leafSprite', 1, this.player,this.wallLayer,this);
 		game.add.existing(this.baddie1);
+
+		//Set up collectable element in the map
+		this.fire1 = new BonFire(game,game.world.centerX-300, 1600, 'bonfire', 1, this.player);
+		game.add.existing(this.fire1);
+
+		//Set up the portal of the level
+		this.portal1 = new Portal(game,game.world.centerX-500, 875, 'portal', 1, this.player,1, this);
+		game.add.existing(this.portal1);
 
 		//Setup background music
 		this.bgmMusic = game.add.audio('bgm');
@@ -69,33 +71,17 @@ Play.prototype = {
 		this.health = game.add.group();
 		this.setHealth(this.player.maxHealth);
 
-		//Setup the icon for type
-		this.typeText = game.add.text(16,16, 'Type');
-		this.typeText.fixedToCamera = true;
-		this.typeText.cameraOffset.setTo(650,15);
-		this.typeText.font = 'ZCOOL KuaiLe';
-		// this.typeText.fill = '#404040';
-		this.typeText.fill = '#ffffff';
-		this.typeText.setShadow(3, 3, 'rgba(1,1,0.8,0.3)', 5);
-		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,'noneIcon');
-		this.typeIcon.scale.setTo(0.4,0.4);
-		this.typeIcon.fixedToCamera = true;
-		this.typeIcon.cameraOffset.setTo(650,50);
+		
 
 		//Create the cursor of the game
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
-		// this.title = game.add.sprite(game.world.centerX, game.world.centerY, 'title');
-		// this.title.fixedToCamera = true;
-		// this.title.cameraOffset.setTo(300,300);
-
-
-		//Set up some instruction text on the map
-		// this.ins1 = game.add.text(game.world.centerX-155, 1150, 'Change element to break blocks!', {fontSize: '15px', fill: '#DBE639'});
-		// this.ins2 = game.add.text(750, 1450, 'Eat elements to change your form!', {fontSize: '15px', fill: '#DBE639'});
-		// this.ins3 = game.add.text(450, 920, 'Kill enemy by bullets!', {fontSize: '15px', fill: '#DBE639'});
-
+		//Set up a level title to this stage
+		this.level = game.add.sprite(0,0,'level1');
+		this.level.fixedToCamera = true;
+		this.level.cameraOffset.setTo(0,0);
+		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);
 
 
 
@@ -103,57 +89,17 @@ Play.prototype = {
 	},
 
 	update: function() {
-		ladder.animations.play('shine');
-		game.physics.arcade.collide(this.player, this.wallLayer);
 
-		// game.physics.arcade.collide(this.baddie1, this.wallLayer);
+		game.physics.arcade.collide(this.player, this.wallLayer);
 
 		game.physics.arcade.collide(this.player.weapon.bullets, this.wallLayer, this.hitWall, null, this);
 
-
-
-
-		// if(this.player.etype != 'fire'){
-		// 	game.physics.arcade.collide(this.player, door);
-		// }else{
-		// 	// game.physics.arcade.overlap(this.player, door, this.openDoor, null, this);
+		// if(this.baddie1 != null){
+		// 	game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
 		// }
-
-
-		game.physics.arcade.overlap(this.player, fire, this.killFire, null, this);
-
-
-		if(this.baddie1 != null){
-			game.physics.arcade.overlap(this.baddie1.weapon1.bullets, this.player, this.hitPlayer, null, this);
-			game.physics.arcade.collide(this.baddie1.weapon1.bullets, this.wallLayer, this.baddyHitWall, null, this);
-		}
 
 		game.physics.arcade.overlap(this.player.weapon.bullets, this.baddie1, this.hitBaddie, null, this);
 
-		game.physics.arcade.overlap(this.player, ladder, this.climbLadder, null, this);
-
-		// if(this.player.etype == null){
-		// 	this.player.animations.play('normal');
-		// }else if(this.player.etype == 'fire'){
-		// 	this.player.animations.play('fireType');
-		// }
-
-	},
-	killFire: function(){
-		fire.kill();
-		this.player.etype = 'fire';
-		this.player.animations.stop(null,true);
-		this.player.resetWeapon('fireBullet');
-		this.resetType('fireIcon');
-
-	},
-
-	openDoor: function(){
-		if(this.player.etype == 'fire'){
-			door.kill();
-		}
-		this.openMusic.play();
-		this.player.weapon.bullets.getAt(0).kill();
 	},
 
 	//Call back function when bullets hit on to the Wall
@@ -164,56 +110,25 @@ Play.prototype = {
 	hitBaddie:function(){
 		this.player.weapon.bullets.getAt(0).kill();
 		this.baddie1.health -=1;
-		// if(this.player.currentDir == 270){
-		// 	this.baddie1.y -= 20;
-		// }else if(this.player.currentDir == 0){
-		// 	this.baddie1.x += 20;
-		// }else if(this.player.currentDir == 90){
-		// 	this.baddie1.y += 20;
-		// }else if(this.player.currentDir == 180){
-		// 	this.baddie1.x -= 20;
-		// }
+		if(this.player.currentDir == 270){
+			this.baddie1.y -= 20;
+		}else if(this.player.currentDir == 0){
+			this.baddie1.x += 20;
+		}else if(this.player.currentDir == 90){
+			this.baddie1.y += 20;
+		}else if(this.player.currentDir == 180){
+			this.baddie1.x -= 20;
+		}
 		if(this.baddie1.health <= 0) {
 			this.baddie1.weapon1.bullets.getAt(0).kill();
 			this.baddie1.kill();
 			this.baddie1.statNow = false;
+			this.portal1.count -= 1;
 
 			this.baddie1 = null;
 		}
 	},
 
-	//This function work when player was hit by baddies
-	hitPlayer:function(){
-		if(this.baddie1.weapon1 != null){
-			this.baddie1.weapon1.bullets.getAt(0).kill();
-		}
-		this.player.onHit();
-		this.health.kill();
-		this.health = game.add.group();
-		this.setHealth(this.player.health);
-
-		if(this.player.health <= 0){
-			this.bgmMusic.stop();
-			game.state.start('GameOver');
-
-		}
-	},
-	//This function work when player change its type
-	resetType:function(type){
-		this.typeIcon.kill();
-		this.typeIcon = game.add.sprite(game.world.centerX,game.world.centerY,type);
-		this.typeIcon.scale.setTo(0.4,0.4);
-		this.typeIcon.fixedToCamera = true;
-		this.typeIcon.cameraOffset.setTo(650,50);
-	},
-	climbLadder:function(){
-		if(this.baddie1 == null){
-			this.bgmMusic.stop();
-			game.state.start('Stage1');
-
-		}
-		console.log(this.baddie1);
-	},
 	setHealth:function(health){
 		for(var i = 0; i < health; i++){
 			var hp = game.add.sprite(0,0,'aid');
@@ -225,11 +140,11 @@ Play.prototype = {
 		}
 
 	},
-	baddyHitWall:function(){
-		if(this.baddie1.statNow != false){
-			this.baddie1.weapon1.bullets.getAt(0).kill();
-		}
-	},
+	// baddyHitWall:function(){
+	// 	if(this.baddie1.statNow != false){
+	// 		this.baddie1.weapon1.bullets.getAt(0).kill();
+	// 	}
+	// },
 	//Debug the collision from tile map
 	render:function(){
 		// game.debug.body(this.baddie1);
