@@ -28,6 +28,8 @@ Load.prototype = {
 		game.load.audio('open', 'assets/audio/open.wav');
 		game.load.audio('finish', 'assets/audio/finish.wav');
 		game.load.audio('gethit', 'assets/audio/gethit.wav');
+		game.load.audio('hits', 'assets/audio/hitS.wav');
+		game.load.audio('hitb', 'assets/audio/hitB.wav');
 		game.load.audio('collect', 'assets/audio/collect.wav');
 		game.load.spritesheet('fireSpirit', 'assets/img/messy.png',37,32);
 		game.load.spritesheet('ladder', 'assets/img/ladder.png',32,32);
@@ -43,6 +45,7 @@ Load.prototype = {
 		game.load.tilemap('map', 'assets/tileTest/testMap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage0', 'assets/tileTest/stage0.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('stage1', 'assets/tileTest/stage1.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('stage2', 'assets/tileTest/stage2.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('test', 'assets/tileTest/tileSheet.png');
 		game.load.image('stage0m', 'assets/tileTest/stage0.png');
 		game.load.image('stage1m', 'assets/tileTest/stage1.png');

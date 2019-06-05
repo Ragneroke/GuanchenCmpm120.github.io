@@ -33,8 +33,12 @@ Portal.prototype.hitPortal = function(){
 		if(this.count == 0){
 			this.stage.bgmMusic.stop();
 			if(stageCount == 0){
-			game.state.start('Stage1');
-		}
+				game.state.start('Stage1');
+			}else if(stageCount == 1){
+				game.state.start('Stage2');
+			}else if(stageCount == 2){
+				game.state.start('GameOver');
+			}
 
 		}
 

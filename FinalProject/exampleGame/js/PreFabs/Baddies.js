@@ -18,6 +18,10 @@ function Baddies(game, x, y, key, frame, player,layer,state) {
 	this.statNow = true;
 	this.state = state;
 	this.layer = layer;
+	this.hits = game.add.audio('hits');
+	this.hits.volume = 0.2;
+	this.hitb = game.add.audio('hitb');
+	this.hitb.volume = 0.2;
 
 
 	//Set the animation of the player
@@ -80,21 +84,26 @@ Baddies.prototype.update = function(){
 }
 
 Baddies.prototype.getHit = function(){
-	this.health -= 1;
 	this.player.weapon.bullets.getAt(0).kill();
-	if(this.player.currentDir == 270){
-			this.y -= 20;
-		}else if(this.player.currentDir == 0){
-			this.x +=20;
-		}else if(this.player.currentDir == 90){
-			this.y +=20;
-		}else if(this.player.currentDir == 180){
-			this.x -=20;
+	if(this.player.etype != 'grass'){
+		this.hits.play();
+		this.health -= 1;
+		if(this.player.currentDir == 270){
+				this.y -= 20;
+			}else if(this.player.currentDir == 0){
+				this.x +=20;
+			}else if(this.player.currentDir == 90){
+				this.y +=20;
+			}else if(this.player.currentDir == 180){
+				this.x -=20;
+			}
+			if(this.health <= 0) {
+				this.state.count -= 1;
+				this.kill();
+				this.statNow = false;
 		}
-		if(this.health <= 0) {
-			this.kill();
-			this.state.count -= 1;
-			this.statNow = false;
+	}else{
+			this.hitb.play();
 		}
 }
 

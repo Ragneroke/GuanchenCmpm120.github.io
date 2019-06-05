@@ -46,9 +46,8 @@ Stage1.prototype = {
 		this.fire1 = new BonFire(game,750, 2400, 'bonfire', 1, this.player);
 		game.add.existing(this.fire1);
 
-		this.grass1 = new Grass(game,1500, 2000, 'seed', 1, this.player);
+		this.grass1 = new Grass(game,1350, 2200, 'seed', 1, this.player);
 		this.grassStatus = false;
-		// game.add.existing(this.grass1);
 
 
 		//Create baddies in this stage

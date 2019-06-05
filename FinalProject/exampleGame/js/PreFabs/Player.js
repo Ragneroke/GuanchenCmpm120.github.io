@@ -323,6 +323,14 @@ Players.prototype.resetType = function(type){
 	this.typeIcon.scale.setTo(0.4,0.4);
 	this.typeIcon.fixedToCamera = true;
 	this.typeIcon.cameraOffset.setTo(650,50);
+	this.typeText.kill();
+	this.typeText = game.add.text(16,16, 'Type');
+	this.typeText.fixedToCamera = true;
+	this.typeText.cameraOffset.setTo(650,15);
+	this.typeText.font = 'ZCOOL KuaiLe';
+	// this.typeText.fill = '#404040';
+	this.typeText.fill = '#ffffff';
+	this.typeText.setShadow(3, 3, 'rgba(1,1,0.8,0.3)', 5);
 }
 
 Players.prototype.hitWall = function(){
