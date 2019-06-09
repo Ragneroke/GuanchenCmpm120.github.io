@@ -92,7 +92,7 @@ Stage1.prototype = {
 		this.level = game.add.sprite(0,0,'level2');
 		this.level.fixedToCamera = true;
 		this.level.cameraOffset.setTo(0,0);
-		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);
+		this.fade = game.add.tween(this.level).to( { alpha: 0 },3000, Phaser.Easing.Linear.None, true);
 
 
 

@@ -49,6 +49,11 @@ Play.prototype = {
 
 		//Set up the portal of the level
 		this.portal1 = new Portal(game,game.world.centerX-500, 875, 'portal', 1, this.player,1, this);
+		this.light=game.add.sprite(game.world.centerX-500, 875, 'light', 1);
+		this.light.anchor.set(0.5);
+		this.light.scale.setTo(0.2,0.2);
+		this.light.animations.add('lighton', [0,1], 5, true);
+
 		game.add.existing(this.portal1);
 
 		//Setup background music
@@ -81,21 +86,9 @@ Play.prototype = {
 		this.level = game.add.sprite(0,0,'level1');
 		this.level.fixedToCamera = true;
 		this.level.cameraOffset.setTo(0,0);
-		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);
+		this.fade = game.add.tween(this.level).to( { alpha: 0 },3000, Phaser.Easing.Linear.None, true);
 
-		//Set up instruction for first level
 
-		this.insText1 = game.add.text(game.world.centerX - 500,1800, '←↑→↓ to move!');
-		this.insText1.font = 'ZCOOL KuaiLe';
-		this.insText1.fill = '#000000';
-
-		this.insText2 = game.add.text(game.world.centerX - 500,1550, 'Absorb Element to get Bullets!');
-		this.insText2.font = 'ZCOOL KuaiLe';
-		this.insText2.fill = '#000000';
-
-		this.insText3 = game.add.text(game.world.centerX - 300,900, 'Defeat all enemies to activate the portal!');
-		this.insText3.font = 'ZCOOL KuaiLe';
-		this.insText3.fill = '#000000';
 
 
 

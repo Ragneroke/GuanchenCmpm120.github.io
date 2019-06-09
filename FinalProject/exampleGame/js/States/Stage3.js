@@ -19,7 +19,7 @@ Stage3.prototype = {
 
 		//Set the tilemap of the game
 		game.stage.setBackgroundColor('#87CEEB');
-		this.map = game.add.tilemap('stage1');
+		this.map = game.add.tilemap('stage3');
 		this.map.addTilesetImage('common', 'test');
 
 		//New tilemaplayer object
@@ -29,13 +29,15 @@ Stage3.prototype = {
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 		//Initial the player object
-		this.player = new Players(game, 750, 2700, 'slimeAll', 1, this.wallLayer);
+		this.player = new Players(game, 1825, 1450, 'slimeAll', 1, this.wallLayer);
 
 		//Create terrain of this level
-		this.createWater(6,6,430,2365);
+		this.terrain = game.add.group();
+		this.createWater(this.terrain,4,7,2300,1280);
+		this.createTree(this.terrain,9,3,1830,1100);
 
 		//Set the portal of this level
-		this.portal1 = new Portal(game,350,2400, 'portal', 1, this.player,1, this);
+		this.portal1 = new Portal(game,2575,1330, 'portal', 1, this.player,1, this);
 		game.add.existing(this.portal1);
 		//Set player
 		//Create the player
@@ -43,20 +45,24 @@ Stage3.prototype = {
 		game.camera.follow(this.player);
 
 		//Set up collectable element in the map
-		this.fire1 = new BonFire(game,750, 2400, 'bonfire', 1, this.player);
-		game.add.existing(this.fire1);
+		this.water1 = new Spring(game,1790, 1350, 'waterSplash', 1, this.player);
+		game.add.existing(this.water1);
 
-		this.grass1 = new Grass(game,1500, 2000, 'seed', 1, this.player);
+		this.grass1 = new Grass(game,1962, 985, 'seed', 1, this.player);
 		this.grassStatus = false;
+
+		this.fire1 = new BonFire(game,1181,1265, 'bonfire', 1, this.player);
+		this.fireStatus = false;
 		// game.add.existing(this.grass1);
 
 
 		//Create baddies in this stage
 		this.enemies = game.add.group();
-		this.addBaddies(this.enemies, 1300, 1900);
-		this.addBaddies(this.enemies, 1400, 2000);
-		this.addBaddies(this.enemies, 1500, 1950);
-		this.addBaddies(this.enemies, 1600, 1800);
+		this.addBaddies(this.enemies, 1940, 951);
+		this.addBaddies(this.enemies, 1970, 951);
+		this.addBaddiesA(this.enemies, 2600, 1300);
+		this.addBaddiesB(this.enemies, 1050, 1306);
+
 
 		//Setup background music
 		this.bgmMusic = game.add.audio('bgm');
@@ -84,10 +90,6 @@ Stage3.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
-		//Set Instructions
-		this.insText1 = game.add.text(600 ,2400 , 'Change to grass type to cross river!');
-		this.insText1.font = 'ZCOOL KuaiLe';
-		this.insText1.fill = '#000000';
 
 		//Set up a level title to this stage
 		this.level = game.add.sprite(0,0,'level2');
@@ -102,12 +104,18 @@ Stage3.prototype = {
 	update: function() { 
 		game.physics.arcade.collide(this.enemies, this.enemies);
 		this.portal1.count = this.count;
-		if(this.count == 0){
+		if(this.count == 3){
+			if(this.fireStatus == false){
+				game.add.existing(this.fire1);
+				this.fireStatus == true;
+			}
+		}else if(this.count == 1){
 			if(this.grassStatus == false){
 				game.add.existing(this.grass1);
-				this.grassStatus == false;
+				this.grassStatus = true;
 			}
 		}
+		game.physics.arcade.collide(this.enemies, this.terrain);
 	},
 
 
@@ -127,11 +135,31 @@ Stage3.prototype = {
 		game.add.existing(baddy);
 		group.add(baddy);
 	},
-	createWater:function(x,y,posX,posY){
+	addBaddiesA:function(group, x, y){
+		var baddy = new BaddiesA(game, x, y, 'leafSprite', 1, this.player, this.wallLayer, this);
+		game.add.existing(baddy);
+		group.add(baddy);
+	},
+	addBaddiesB:function(group, x, y){
+		var baddy = new BaddiesB(game, x, y, 'iceSprite', 1, this.player, this.wallLayer, this, 'yMove');
+		game.add.existing(baddy);
+		group.add(baddy);
+	},
+	createWater:function(group,x,y,posX,posY){
 		for(var i = 0; i < y; ++i){
 			for(var j = 0; j < x; ++j){
 				var wat = new Water(game, posX + j*32, posY + i*32, 'water', 1, this.player);
 				game.add.existing(wat);
+				group.add(wat);
+			}
+		}
+	},
+	createTree:function(group,x,y,posX,posY){
+		for(var i = 0; i < y; ++i){
+			for(var j = 0; j < x; ++j){
+				var tree = new Tree(game, posX + j*32, posY + i*32, 'tree', 1, this.player);
+				game.add.existing(tree);
+				group.add(tree);
 			}
 		}
 	}

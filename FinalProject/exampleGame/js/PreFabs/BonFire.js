@@ -4,6 +4,7 @@ function BonFire(game, x, y, key, frame, player){
 	this.enableBody = true;
 	this.body.immovable = true;
 	this.scale.setTo(0.2);
+	this.body.setSize(130,130,100,75);
 	this.player = player;
 	this.animations.add('stay', [0,0,1,1], 10, true);
 	this.collect = game.add.audio('collect');

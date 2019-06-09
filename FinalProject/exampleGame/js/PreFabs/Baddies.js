@@ -1,4 +1,4 @@
-function Baddies(game, x, y, key, frame, player,layer,state) {
+function Baddies(game, x, y, key, frame, player,layer,state,condition) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
@@ -13,7 +13,7 @@ function Baddies(game, x, y, key, frame, player,layer,state) {
 	this.body.setSize(125,125,90,100);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 50;
+	this.speed = 80;
 	this.health = this.maxHealth;
 	this.statNow = true;
 	this.state = state;
@@ -22,6 +22,7 @@ function Baddies(game, x, y, key, frame, player,layer,state) {
 	this.hits.volume = 0.2;
 	this.hitb = game.add.audio('hitb');
 	this.hitb.volume = 0.2;
+	this.condition = condition;
 
 
 	//Set the animation of the player
@@ -83,28 +84,42 @@ Baddies.prototype.update = function(){
 	game.physics.arcade.collide(this, this.layer);
 }
 
-Baddies.prototype.getHit = function(){
-	this.player.weapon.bullets.getAt(0).kill();
+Baddies.prototype.getHit = function(me, bullet){
+	
+
 	if(this.player.etype != 'grass'){
 		this.hits.play();
 		this.health -= 1;
-		if(this.player.currentDir == 270){
+		console.log(bullet.angle);
+		if(bullet.angle == -90){
 				this.y -= 20;
-			}else if(this.player.currentDir == 0){
+				// game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
+			}else if(bullet.angle == 0){
 				this.x +=20;
-			}else if(this.player.currentDir == 90){
+			}else if(bullet.angle == 90){
 				this.y +=20;
-			}else if(this.player.currentDir == 180){
+			}else if(bullet.angle == -180){
 				this.x -=20;
 			}
 			if(this.health <= 0) {
 				this.state.count -= 1;
+				if(this.condition == 'left'){
+					this.state.fireLeft -=1;
+				}else if(this.condition == 'top'){
+					this.state.fireUp -= 1;
+				}
 				this.kill();
 				this.statNow = false;
 		}
 	}else{
 			this.hitb.play();
 		}
+		bullet.kill();
+}
+
+Baddies.prototype.stayOffWallUp = function(){
+	this.y += 1;
+	game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
 }
 
 Baddies.prototype.hitPlayer = function(){

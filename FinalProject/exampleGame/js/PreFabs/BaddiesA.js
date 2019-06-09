@@ -1,9 +1,12 @@
-function BaddiesA(game, x, y, key, frame, player,layer,state) {
+//The leaf sprite Prefab
+//This sprite can move any direction in a low speed 
+//and shooting middle speed bullets
+function BaddiesA(game, x, y, key, frame, player,layer,state,condition) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
 
-	//Setup the basic physics of players
+	//Setup the basic physics of baddies
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.enableBody = true;
 	this.body.collideWorldBounds = true;
@@ -14,7 +17,7 @@ function BaddiesA(game, x, y, key, frame, player,layer,state) {
 	this.body.bounce.setTo(1,1);
 	this.originX = x;
 	this.originY = y;
-	this.speed = 15;
+	this.speed = 40;
 	this.health = this.maxHealth;
 	this.direction = 180;
 	this.weapon1 = game.add.weapon(1, 'grassBullet');
@@ -29,35 +32,10 @@ function BaddiesA(game, x, y, key, frame, player,layer,state) {
 	this.hits.volume = 0.2;
 	this.hitb = game.add.audio('hitb');
 	this.hitb.volume = 0.2;
+	this.condition = condition;
 
-	//Set the animation of the player
+	//Set the animation of the baddie
 	this.animations.add('stay', [0,1,2,3,4], 5, true);
-
-	//Setup the bullet function of the player
-	// this.direction = 180;
-	// this.weapon = game.add.weapon(1, 'star');
-	// this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-	// this.weapon.bulletSpeed = 350;
-	// this.weapon.trackSprite(this, 0, 0);
-	// this.weapon.fireRate = 300;
-
-	// //Setup another bullet funciton for back up
-	// this.bullets = game.add.group();
-	// this.bulletTime = 0;
-	// this.bullets.enableBody = true;
-	// this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-	// this.bullets.createMultiple(30, 'star');
-	// this.bullets.setAll('anchor', 0.5);
-	// this.bullets.setAll('outOfBoundsKill', true);
-	// this.bullets.setAll('checkWorldBounds', true);
-
-
-	//Set the element type of player
-
-	//Set the cursor for controller
-	// cursors = game.input.keyboard.createCursorKeys();
-	// fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-	// testButton = game.input.keyboard.addKey(Phaser.KeyCode.A);
 
 
 }
@@ -120,26 +98,34 @@ BaddiesA.prototype.render = function(){
 BaddiesA.prototype.hitWall = function(){
 	this.weapon1.bullets.getAt(0).kill();
 }
-BaddiesA.prototype.getHit = function(){
-	this.player.weapon.bullets.getAt(0).kill();
+BaddiesA.prototype.getHit = function(me, bullet){
 	if(this.player.etype != 'water'){
 		this.hits.play();
 		this.health -= 1;
-		if(this.player.currentDir == 270){
+		console.log(bullet.angle);
+		if(bullet.angle == -90){
 				this.y -= 20;
-			}else if(this.player.currentDir == 0){
+				// game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
+			}else if(bullet.angle == 0){
 				this.x +=20;
-			}else if(this.player.currentDir == 90){
+			}else if(bullet.angle == 90){
 				this.y +=20;
-			}else if(this.player.currentDir == 180){
+			}else if(bullet.angle == -180){
 				this.x -=20;
 			}
 			if(this.health <= 0) {
 				this.state.count -= 1;
+				if(this.condition == 'middle'){
+					this.state.leafMiddle -=1;
+				}else if(this.condition == 'bot'){
+					this.state.spritBot -= 1;
+				}
+				console.log(this.condition);
 				this.kill();
 				this.statNow = false;
 		}
 	}else{
 			this.hitb.play();
 		}
+		bullet.kill();
 }

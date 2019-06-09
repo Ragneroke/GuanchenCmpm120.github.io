@@ -1,4 +1,4 @@
-function BaddiesB(game, x, y, key, frame, player,layer,state,moveType) {
+function BaddiesB(game, x, y, key, frame, player,layer,state,moveType,condition) {
 
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	var _Baddies = this;
@@ -30,7 +30,7 @@ function BaddiesB(game, x, y, key, frame, player,layer,state,moveType) {
 	this.hits.volume = 0.2;
 	this.hitb = game.add.audio('hitb');
 	this.hitb.volume = 0.2;
-
+	this.condition = condition;
 	//Set the animation of the player
 	this.animations.add('stay', [0,0,1,1], 5, true);
 }
@@ -82,26 +82,30 @@ BaddiesB.prototype.render = function(){
 BaddiesB.prototype.hitWall = function(){
 	this.weapon1.bullets.getAt(0).kill();
 }
-BaddiesB.prototype.getHit = function(){
-	this.player.weapon.bullets.getAt(0).kill();
+BaddiesB.prototype.getHit = function(me, bullet){
 	if(this.player.etype != 'fire'){
 		this.hits.play();
 		this.health -= 1;
-		if(this.player.currentDir == 270){
+		if(bullet.angle == -90){
 				this.y -= 20;
-			}else if(this.player.currentDir == 0){
+				// game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
+			}else if(bullet.angle == 0){
 				this.x +=20;
-			}else if(this.player.currentDir == 90){
+			}else if(bullet.angle == 90){
 				this.y +=20;
-			}else if(this.player.currentDir == 180){
+			}else if(bullet.angle == -180){
 				this.x -=20;
 			}
 			if(this.health <= 0) {
 				this.state.count -= 1;
+				if(this.condition == 'bot'){
+					this.state.spritBot -= 1;
+				}
 				this.kill();
 				this.statNow = false;
 		}
 	}else{
 			this.hitb.play();
 		}
+		bullet.kill();
 }

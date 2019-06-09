@@ -50,6 +50,9 @@ Stage2.prototype = {
 		this.grass1 = new Grass(game,1950, 2000, 'seed', 1, this.player);
 		this.grassStatus = false;
 
+		this.treasure1 = new Treasure(game,2100, 2800, 'treasure', 1, this.player, this, 'book');
+		game.add.existing(this.treasure1);
+
 
 		//Create baddies in this stage
 		this.enemies = game.add.group();
@@ -90,10 +93,10 @@ Stage2.prototype = {
 		this.insText1.fill = '#000000';
 
 		//Set up a level title to this stage
-		this.level = game.add.sprite(0,0,'level2');
+		this.level = game.add.sprite(0,0,'level3');
 		this.level.fixedToCamera = true;
 		this.level.cameraOffset.setTo(0,0);
-		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);
+		this.fade = game.add.tween(this.level).to( { alpha: 0 },3000, Phaser.Easing.Linear.None, true);
 
 
 
