@@ -13,6 +13,7 @@ window.onload = function() {
 	game.state.add('Boot', Boot);
 	game.state.add('Load', Load);
 	game.state.add('MainMenu', MainMenu);
+	game.state.add('Credits', Credits);
 	game.state.add('HowToPlay', HowToPlay);
 	game.state.add('Stage0', Play);
 	game.state.add('Stage1', Stage1);
@@ -27,6 +28,7 @@ var Boot = function(game){};
 var Load = function(game){};
 var MainMenu = function(game){};
 var HowToPlay = function(game){};
+var Credits = function(game){}
 var Play = function(game){};
 var Stage1 = function(game){};
 var Stage2 = function(game){}

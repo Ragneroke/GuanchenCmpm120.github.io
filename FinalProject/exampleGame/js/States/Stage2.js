@@ -50,7 +50,7 @@ Stage2.prototype = {
 		this.grass1 = new Grass(game,1950, 2000, 'seed', 1, this.player);
 		this.grassStatus = false;
 
-		this.treasure1 = new Treasure(game,2100, 2800, 'treasure', 1, this.player, this, 'book');
+		this.treasure1 = new Treasure(game,2100, 2800, 'treasure', 1, this.player, this, 'heart');
 		game.add.existing(this.treasure1);
 
 

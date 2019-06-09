@@ -48,9 +48,8 @@ Portal.prototype.hitPortal = function(){
 				game.state.start('Stage4');
 			}else if(stageCount == 4){
 				game.time.events.add(5000, this.fadeWhite, this);
-				if(this.level.alpha == 1){
-					game.state.start('Ending');
-				}
+				game.state.start('Ending');
+
 			}
 
 		}

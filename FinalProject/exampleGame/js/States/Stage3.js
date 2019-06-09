@@ -51,6 +51,11 @@ Stage3.prototype = {
 		this.grass1 = new Grass(game,1962, 985, 'seed', 1, this.player);
 		this.grassStatus = false;
 
+		this.treasure1 = new Treasure(game,1900, 951, 'treasure', 1, this.player, this, 'book1');
+		game.add.existing(this.treasure1);
+
+
+
 		this.fire1 = new BonFire(game,1181,1265, 'bonfire', 1, this.player);
 		this.fireStatus = false;
 		// game.add.existing(this.grass1);

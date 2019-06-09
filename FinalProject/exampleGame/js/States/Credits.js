@@ -1,4 +1,4 @@
-HowToPlay.prototype = {
+Credits.prototype = {
 	preload: function(){
 
 	},
@@ -24,10 +24,12 @@ HowToPlay.prototype = {
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 
 		//Set up the game title
-		this.title = game.add.sprite(game.world.centerX, game.world.centerY, 'howtoplay');
-		this.title.fixedToCamera = true;
-		this.title.anchor.setTo(0.5,0.5);
-		this.title.cameraOffset.setTo(400,400);
+		this.text1 = game.add.text(100,100,"Thanks for playing our game!\nCMPM 120 & ARTG 120 \nProfessor Nathan Altice & Elizabeth Swensen\nGROUP 7 Team Large Soda\nProgrammer: Guanchen Liu\nArtist and Animation: Ying Luo\nSound and tile art: Jian Wu\nEnding Song: “Roundabout” by Yes\nThanks to our TA Richard Grillotti\n\nAnd thanks to everyone who playtest our games!\nPress SPACE to return to Main Menu");
+        this.text1.font = 'ZCOOL KuaiLe';
+        this.text1.fill = '#000000';
+		this.text1.fixedToCamera = true;
+		this.text1.anchor.setTo(0.5,0.5);
+		this.text1.cameraOffset.setTo(400,400);
 
 		//Set camera for Main Menu
 		game.camera.x =game.world.centerX+300;
@@ -37,7 +39,7 @@ HowToPlay.prototype = {
 	update: function(){
 		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
 			//Press the space to start the play state
-			game.state.start('Stage0');
+			game.state.start('MainMenu');
 		}
 	},
 	makeText:function(){

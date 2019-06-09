@@ -544,7 +544,6 @@ Players.prototype.update = function(){
 			//Fire the Weapon
 			this.weapon.fire();
 			this.currentDir = this.weapon.fireAngle;
-			console.log(this.x,this.y);
 			if(this.etype != 'none'){
 				this.shot.play();
 			}
@@ -687,7 +686,7 @@ Players.prototype.resetWeapon = function(type){
 	this.weapon = game.add.weapon(200, type);
 	this.weapon.bulletSpeed = 350;
 	this.weapon.trackSprite(this, 0, 0);
-	this.weapon.fireRate = 250;
+	this.weapon.fireRate = 400;
 }
 
 Players.prototype.onHit = function(){

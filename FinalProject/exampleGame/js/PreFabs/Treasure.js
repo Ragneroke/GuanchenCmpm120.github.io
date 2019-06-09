@@ -28,10 +28,13 @@ Treasure.prototype.update = function(){
 
 Treasure.prototype.open = function(){
 		if(this.contain === 'heart'){
-			this.heart1 = new Heart(game,this.x + 60, this.y, 'aid', 1, this.player, this);
+			this.heart1 = new Heart(game,this.x + 60, this.y, 'aid', 1, this.player, this.state);
 			game.add.existing(this.heart1);
-		}else if(this.contain == 'book'){
-			this.book1 = new Book(game,this.x + 60, this.y, 'book', 1, this.player, this);
+		}else if(this.contain == 'book1'){
+			this.book1 = new Book(game,this.x + 60, this.y, 'book', 1, this.player, this,'first');
+			game.add.existing(this.book1);
+		}else if(this.contain == 'book2'){
+			this.book1 = new Book(game,this.x + 60, this.y, 'book', 1, this.player, this,'second');
 			game.add.existing(this.book1);
 		}
 		this.condition = true;

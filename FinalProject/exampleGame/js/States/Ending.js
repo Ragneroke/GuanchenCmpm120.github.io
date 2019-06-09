@@ -19,9 +19,9 @@ Ending.prototype = {
 
 	},
 	toBeContinue: function(){
-		this.text1 = game.add.text(200,200,"Thanks for playing our game!\nEnding song:Roundabout by Yes\n Press space back to Main Menu");
-		this.text1.font = 'ZCOOL KuaiLe';
-		this.text1.fill = '#ffffff';
+		this.text1 = game.add.text(100,100,"Thanks for playing our game!\nCMPM 120 & ARTG 120 \nProfessor Nathan Altice & Elizabeth Swensen\nGROUP 7 Team Large Soda\nProgrammer: Guanchen Liu\nArtist and Animation: Ying Luo\nSound and tile art: Jian Wu\nEnding Song: “Roundabout” by Yes\nThanks to our TA Richard Grillotti\n\nAnd thanks to everyone who playtest our games!\nPress SPACE to return to Main Menu");
+        this.text1.font = 'ZCOOL KuaiLe';
+        this.text1.fill = '#ffffff';
 		this.skip = true;
 	}
 

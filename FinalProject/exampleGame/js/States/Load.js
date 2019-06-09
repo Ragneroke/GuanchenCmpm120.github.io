@@ -28,6 +28,7 @@ Load.prototype = {
 		game.load.image('howtoplay', 'assets/img/howtoplay.png');
 		game.load.image('book', 'assets/img/scroll.png');
 		game.load.image('bookOpen', 'assets/img/scrollopen.png');
+		game.load.image('dialogue', 'assets/img/dialogue.png');
 		game.load.audio('bgm', 'assets/audio/fish.mp3');
 		game.load.audio('pop', 'assets/audio/pop.ogg');
 		game.load.audio('open', 'assets/audio/open.wav');

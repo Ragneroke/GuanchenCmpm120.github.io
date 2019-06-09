@@ -57,6 +57,8 @@ MainMenu.prototype = {
 		this.text1.anchor.setTo(0.5,0.5);
 		this.text1.cameraOffset.setTo (400, 750);
 
+		this.condition = 0;
+
 		//Set camera for Main Menu
 		game.camera.x =game.world.centerX-650;
 		game.camera.y = 1400;
@@ -65,13 +67,20 @@ MainMenu.prototype = {
 	update: function(){
 		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
 			//Press the space to start the play state
-			game.state.start('HowToPlay');
+			if(this.condition == 0){
+				game.state.start('HowToPlay');
+			}else{
+				game.state.start('Credits');
+			}
 		}
 
 		if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
 			this.choose.cameraOffset.setTo(200,600);
+			this.condition = 1;
+
 		}else if(game.input.keyboard.isDown(Phaser.Keyboard.UP)){
 			this.choose.cameraOffset.setTo(250,500);
+			this.condition = 0;
 		}
 	},
 	makeText:function(){

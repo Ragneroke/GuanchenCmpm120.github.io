@@ -37,8 +37,7 @@ Stage4.prototype = {
 
 		//Create terrain of this level
 		this.terrain = game.add.group();
-		this.createWater(this.terrain,4,7,2300,1280);
-		this.createLava(this.terrain,19,4,1410,3696)
+		this.createLava(this.terrain,19,4,1410,3696);
 		this.createTree(this.terrain,3,16,1156,3035);
 
 		//Set the portal of this level
@@ -60,7 +59,12 @@ Stage4.prototype = {
 
 		this.fire1 = new BonFire(game,630,3230, 'bonfire', 1, this.player);
 		this.fireStatus = false;
-		// game.add.existing(this.grass1);
+
+		this.treasure1 = new Treasure(game,1550, 4066, 'treasure', 1, this.player, this, 'book2');
+		game.add.existing(this.treasure1);
+
+		this.treasure2 = new Treasure(game,2936, 3266, 'treasure', 1, this.player, this, 'heart');
+		game.add.existing(this.treasure2);
 
 
 		//Create baddies in this stage

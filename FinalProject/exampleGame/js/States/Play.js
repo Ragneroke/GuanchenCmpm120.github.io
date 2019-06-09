@@ -82,6 +82,13 @@ Play.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
+		//Add dialogue box for first stage
+		this.dialogue1 = game.add.sprite(0,0,'dialogue');
+		this.dialogueText = game.add.text(0,0,'What the...? Where am I?');
+		this.dialogueText.font = 'ZCOOL KuaiLe';
+		game.time.events.add(0, this.addDialogue, this);
+		game.time.events.add(5000, this.killDialogue, this);
+
 		//Set up a level title to this stage
 		this.level = game.add.sprite(0,0,'level1');
 		this.level.fixedToCamera = true;
@@ -108,6 +115,18 @@ Play.prototype = {
 
 		}
 
+	},
+	addDialogue:function(){
+		this.dialogue1.fixedToCamera = true;
+		this.dialogue1.anchor.setTo(0.5,0.5);
+		this.dialogue1.cameraOffset.setTo(400,550);
+		this.dialogueText.fixedToCamera = true;
+		this.dialogueText.anchor.setTo(0.5,0.5);
+		this.dialogueText.cameraOffset.setTo(400,550);
+	},
+	killDialogue:function(){
+		this.dialogue1.kill();
+		this.dialogueText.kill();
 	},
 	//Debug the collision from tile map
 	render:function(){
