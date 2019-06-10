@@ -24,6 +24,8 @@ Load.prototype = {
 		game.load.image('level1', 'assets/img/level.png');
 		game.load.image('level2', 'assets/img/level2.png');
 		game.load.image('level3', 'assets/img/level3.png');
+		game.load.image('level4', 'assets/img/level4.png');
+		game.load.image('level5', 'assets/img/level5.png');
 		game.load.image('gameOver', 'assets/img/GameOver.png');
 		game.load.image('howtoplay', 'assets/img/howtoplay.png');
 		game.load.image('book', 'assets/img/scroll.png');

@@ -1,3 +1,5 @@
+//The water element in the game
+//Player will change in to water type after overlap with it
 function Spring(game, x, y, key, frame, player){
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);

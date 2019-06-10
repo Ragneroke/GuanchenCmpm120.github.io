@@ -1,3 +1,5 @@
+//This Prefab works for the protal of the game
+//The portal won't be activated unless all enemies in the stage are dead
 function Portal(game, x, y, key, frame, player, count, stage){
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);

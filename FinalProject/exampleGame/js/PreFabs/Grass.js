@@ -1,3 +1,5 @@
+//The grass element in the game
+//Player will change in to grass type after overlap with it
 function Grass(game, x, y, key, frame, player){
 	Phaser.Sprite.call(this,game,x,y,key,frame);
 	game.physics.enable(this, Phaser.Physics.ARCADE);

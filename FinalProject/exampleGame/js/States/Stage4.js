@@ -83,7 +83,7 @@ Stage4.prototype = {
 
 
 		//Setup background music
-		this.bgmMusic = game.add.audio('bgm');
+		this.bgmMusic = game.add.audio('bgm',1,true);
 		this.bgmMusic.volume = 0.2;
 		this.bgmMusic.play();
 		this.openMusic = game.add.audio('open');
@@ -109,7 +109,7 @@ Stage4.prototype = {
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
 		//Set up a level title to this stage
-		this.level = game.add.sprite(0,0,'level2');
+		this.level = game.add.sprite(0,0,'level5');
 		this.level.fixedToCamera = true;
 		this.level.cameraOffset.setTo(0,0);
 		this.fade = game.add.tween(this.level).to( { alpha: 0 },2000, Phaser.Easing.Linear.None, true);

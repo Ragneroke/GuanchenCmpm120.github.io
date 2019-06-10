@@ -3,6 +3,7 @@ Ending.prototype = {
 
 	},
 	create: function(){
+		stageCount = 0;
 		game.stage.backgroundColor = '#232323';
 		this.video =  game.add.video('ending');
 		this.video.play(false);

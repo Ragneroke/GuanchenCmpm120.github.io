@@ -102,7 +102,6 @@ BaddiesA.prototype.getHit = function(me, bullet){
 	if(this.player.etype != 'water'){
 		this.hits.play();
 		this.health -= 1;
-		console.log(bullet.angle);
 		if(bullet.angle == -90){
 				this.y -= 20;
 				// game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
@@ -120,7 +119,6 @@ BaddiesA.prototype.getHit = function(me, bullet){
 				}else if(this.condition == 'bot'){
 					this.state.spritBot -= 1;
 				}
-				console.log(this.condition);
 				this.kill();
 				this.statNow = false;
 		}

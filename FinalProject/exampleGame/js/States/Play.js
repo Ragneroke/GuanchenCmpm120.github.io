@@ -11,6 +11,7 @@ Play.prototype = {
 	},
 
 	create: function() {
+		stageCount = 0;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		//Set up bounds of world
 		game.world.setBounds(0, 0, 1600, 1600);
@@ -49,15 +50,10 @@ Play.prototype = {
 
 		//Set up the portal of the level
 		this.portal1 = new Portal(game,game.world.centerX-500, 875, 'portal', 1, this.player,1, this);
-		this.light=game.add.sprite(game.world.centerX-500, 875, 'light', 1);
-		this.light.anchor.set(0.5);
-		this.light.scale.setTo(0.2,0.2);
-		this.light.animations.add('lighton', [0,1], 5, true);
-
 		game.add.existing(this.portal1);
 
 		//Setup background music
-		this.bgmMusic = game.add.audio('bgm');
+		this.bgmMusic = game.add.audio('bgm',1,true);
 		this.bgmMusic.volume = 0.2;
 		this.bgmMusic.play();
 		this.openMusic = game.add.audio('open');

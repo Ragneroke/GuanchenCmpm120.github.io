@@ -8,7 +8,7 @@ Stage1.prototype = {
 	},
 
 	create: function() {
-		stageCount += 1;
+		stageCount = 1;
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		//Set up bounds of world
 		game.world.setBounds(0, 0, 1600, 1600);
@@ -58,7 +58,7 @@ Stage1.prototype = {
 		this.addBaddies(this.enemies, 1600, 1800);
 
 		//Setup background music
-		this.bgmMusic = game.add.audio('bgm');
+		this.bgmMusic = game.add.audio('bgm',1,true);
 		this.bgmMusic.volume = 0.2;
 		this.bgmMusic.play();
 		this.openMusic = game.add.audio('open');
@@ -83,10 +83,6 @@ Stage1.prototype = {
 		cursors = game.input.keyboard.createCursorKeys();
 		fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
-		//Set Instructions
-		this.insText1 = game.add.text(600 ,2400 , 'Change to grass type to cross river!');
-		this.insText1.font = 'ZCOOL KuaiLe';
-		this.insText1.fill = '#000000';
 
 		//Set up a level title to this stage
 		this.level = game.add.sprite(0,0,'level2');

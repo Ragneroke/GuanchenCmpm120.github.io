@@ -28,33 +28,6 @@ function Baddies(game, x, y, key, frame, player,layer,state,condition) {
 	//Set the animation of the player
 	this.animations.add('stay', [0,1,2,3,4,5,6,7], 10, true);
 
-	//Setup the bullet function of the player
-	// this.direction = 180;
-	// this.weapon = game.add.weapon(1, 'star');
-	// this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-	// this.weapon.bulletSpeed = 350;
-	// this.weapon.trackSprite(this, 0, 0);
-	// this.weapon.fireRate = 300;
-
-	// //Setup another bullet funciton for back up
-	// this.bullets = game.add.group();
-	// this.bulletTime = 0;
-	// this.bullets.enableBody = true;
-	// this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-	// this.bullets.createMultiple(30, 'star');
-	// this.bullets.setAll('anchor', 0.5);
-	// this.bullets.setAll('outOfBoundsKill', true);
-	// this.bullets.setAll('checkWorldBounds', true);
-
-
-	//Set the element type of player
-
-	//Set the cursor for controller
-	// cursors = game.input.keyboard.createCursorKeys();
-	// fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-	// testButton = game.input.keyboard.addKey(Phaser.KeyCode.A);
-
-
 }
 
 Baddies.prototype = Object.create(Phaser.Sprite.prototype);
@@ -90,7 +63,6 @@ Baddies.prototype.getHit = function(me, bullet){
 	if(this.player.etype != 'grass'){
 		this.hits.play();
 		this.health -= 1;
-		console.log(bullet.angle);
 		if(bullet.angle == -90){
 				this.y -= 20;
 				// game.physics.arcade.collide(this, this.layer, this.stayOffWallUp);
